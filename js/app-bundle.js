@@ -142,22 +142,63 @@
   // ── 4. UI-Компонент Сцены ──────────────────────────────
   function renderCrashTestQuiz() {
     return `
-      <div id="crash-quiz-app" class="w-full max-w-xl mx-auto bg-slate-900/90 backdrop-blur-xl text-white rounded-3xl p-5 sm:p-6 border border-slate-800/80 shadow-2xl overflow-hidden relative">
-        <div class="mb-4 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80">
+      <!-- Top Site Header Finexpert -->
+      <header class="w-full max-w-2xl mx-auto mb-4 px-2 pt-3">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#354251] pb-3">
+          <!-- Logo -->
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-[#CACC90] text-[#151617] font-serif font-bold text-lg flex items-center justify-center shadow-md">Ф</div>
+            <div class="flex flex-col">
+              <span class="font-serif text-lg font-bold tracking-tight text-white leading-none">ФИНЭКСПЕРТ</span>
+              <span class="text-[10px] text-[#999999] tracking-wider uppercase">Аутсорсинг бухгалтерии</span>
+            </div>
+          </div>
+
+          <!-- Contacts -->
+          <div class="hidden sm:flex items-center gap-4 text-xs text-[#999999]">
+            <div class="flex flex-col text-right">
+              <a href="tel:88006002506" class="text-white font-semibold hover:text-[#CACC90] transition-colors">8 (800) 600-25-06</a>
+              <span>Екатеринбург, Горького 65</span>
+            </div>
+            <button type="button" onclick="document.getElementById('btn-fix-car')?.click() || window.open('https://finexpert-e.ru', '_blank')" class="px-3.5 py-1.5 bg-[#CACC90] text-[#151617] text-xs font-semibold rounded-full hover:bg-[#F4EBBE] transition-colors">
+              Консультация
+            </button>
+          </div>
+        </div>
+
+        <!-- Ratings & Trust Badges -->
+        <div class="grid grid-cols-3 gap-2 mt-3 text-center">
+          <div class="bg-[#1E2021] border border-[#354251] rounded-xl p-2">
+            <div class="text-[#CACC90] font-bold text-xs sm:text-sm">ТОП-3</div>
+            <div class="text-[10px] text-[#999999]">4 года подряд</div>
+          </div>
+          <div class="bg-[#1E2021] border border-[#354251] rounded-xl p-2">
+            <div class="text-[#CACC90] font-bold text-xs sm:text-sm">4,9 ★</div>
+            <div class="text-[10px] text-[#999999]">Яндекс Карты</div>
+          </div>
+          <div class="bg-[#1E2021] border border-[#354251] rounded-xl p-2">
+            <div class="text-[#CACC90] font-bold text-xs sm:text-sm">10 млн ₽</div>
+            <div class="text-[10px] text-[#999999]">Гарантия ФО</div>
+          </div>
+        </div>
+      </header>
+
+      <div id="crash-quiz-app" class="w-full max-w-2xl mx-auto bg-[#1E2021] text-white rounded-3xl p-4 sm:p-6 border border-[#354251] shadow-2xl overflow-hidden relative">
+        <div class="mb-4 bg-[#151617] p-3.5 rounded-2xl border border-[#354251]">
           <div class="flex justify-between items-center text-xs mb-2 font-medium">
-            <span id="quiz-step-title" class="text-slate-300 font-semibold tracking-wide flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="quiz-step-title" class="text-slate-200 font-semibold tracking-wide flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#CACC90] animate-pulse"></span>
               Краш-тест вашей бухгалтерии
             </span>
-            <span id="quiz-damage-text" class="text-emerald-400 font-bold bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 shadow-sm">Урон: 0%</span>
+            <span id="quiz-damage-text" class="text-[#CACC90] font-bold bg-[#CACC90]/10 px-3 py-1 rounded-full border border-[#CACC90]/30 shadow-sm">Урон: 0%</span>
           </div>
-          <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-800/60">
-            <div id="quiz-damage-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full w-0 transition-all duration-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
+          <div class="w-full h-2.5 bg-[#1E2021] rounded-full overflow-hidden p-0.5 border border-[#354251]">
+            <div id="quiz-damage-bar" class="h-full bg-[#CACC90] rounded-full w-0 transition-all duration-500 shadow-[0_0_12px_rgba(202,204,144,0.5)]"></div>
           </div>
         </div>
 
         <!-- STAGE WITH CINEMATIC VIDEO BACKGROUND & SVG ROCK FLYING FROM TOP-LEFT (16:9) -->
-        <div id="car-stage" class="relative w-full h-52 sm:h-60 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl mb-5 bg-black">
+        <div id="car-stage" class="relative w-full h-48 sm:h-56 rounded-2xl border border-[#354251] overflow-hidden shadow-2xl mb-5 bg-black">
           <div class="absolute inset-0 overflow-hidden">
             <video id="scene-bg-video" autoplay loop muted playsinline class="w-full h-full object-cover veo-drive-scene transition-all duration-500">
               <source src="./Photorealistic_cinematic_short.mp4" type="video/mp4">
@@ -171,7 +212,7 @@
 
           <!-- 3D Крупный векторный Камень (SVG) Слева Сверху -->
           <img id="strike-pebble" src="./img/rock.svg" alt="Камень" class="absolute top-12 left-1/2 -translate-x-1/2 w-20 h-20 z-30 opacity-0 pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)]" />
-          <div id="spark-effect" class="absolute top-16 left-1/2 -translate-x-1/2 w-24 h-24 bg-amber-400 rounded-full blur-lg z-30 opacity-0 pointer-events-none mix-blend-screen"></div>
+          <div id="spark-effect" class="absolute top-16 left-1/2 -translate-x-1/2 w-24 h-24 bg-[#F4EBBE] rounded-full blur-lg z-30 opacity-0 pointer-events-none mix-blend-screen"></div>
           <div id="shatter-glass" class="absolute top-10 left-1/2 w-12 h-12 bg-white/40 backdrop-blur border border-white/80 rounded z-20 opacity-0 pointer-events-none"></div>
 
           <!-- КРУПНЫЕ ЯРКИЕ ОТЛЕТАЮЩИЕ ДЕТАЛИ КУЗОВА (Ultra-Visible SVG Car Parts) -->
@@ -239,15 +280,18 @@
     function renderStartScreen() {
       cardContainer.innerHTML = `
         <div class="text-center py-4 px-2 fade-in space-y-4">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full shadow-sm">
-            ⚡ 60 секунд • 9 ключевых вопросов
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-[#CACC90]/15 border border-[#CACC90]/30 text-[#CACC90] text-xs font-semibold rounded-full shadow-sm">
+            ⚡ 60 секунд • Экспресс-Аудит
           </div>
-          <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">Пройдите 9 этапов краш-теста</h2>
-          <p class="text-slate-300 text-sm leading-relaxed max-w-md mx-auto">
-            Узнайте за 60 секунд, выдержит ли ваш учет неожиданную проверку ФНС или увольнение бухгалтера.
+          <h1 class="font-serif text-2xl sm:text-3xl text-white font-normal leading-tight">
+            Аутсорсинг бухгалтерии 
+            <span class="block text-[#DEDEDE] italic text-xl sm:text-2xl mt-1">для малого, среднего и крупного бизнеса</span>
+          </h1>
+          <p class="text-[#999999] text-sm leading-relaxed max-w-md mx-auto">
+            Пройдите короткий опрос за 1 минуту и получите <strong class="text-white">БЕСПЛАТНО</strong> экспресс аудит Вашей бухгалтерской базы.
           </p>
-          <button id="btn-start-quiz" class="btn-primary py-4 px-6 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold rounded-2xl btn-press text-base btn-pulse shadow-xl shadow-emerald-500/25 transition-all">
-            🚀 Начать краш-тест
+          <button id="btn-start-quiz" class="iksweb btn-pulse text-base sm:text-lg w-full max-w-xs mx-auto my-2">
+            Пройти краш-тест →
           </button>
         </div>
       `;
@@ -263,8 +307,8 @@
       stepTitle.textContent = q.title;
 
       const optionsHtml = q.options.map((opt, i) => `
-        <button data-damage="${opt.damage}" class="group quiz-opt-btn w-full text-left p-4 sm:p-4.5 min-h-[64px] bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-800/70 border border-slate-700/60 hover:border-indigo-500/60 hover:bg-slate-800/90 rounded-2xl transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-indigo-500/15 flex items-center gap-3.5 btn-press cursor-pointer relative overflow-hidden">
-          <span class="w-7 h-7 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center justify-center font-bold text-xs shrink-0 group-hover:bg-indigo-500 group-hover:text-white group-hover:border-transparent transition-all shadow-sm">${i+1}</span>
+        <button data-damage="${opt.damage}" class="group quiz-opt-btn w-full text-left p-4 sm:p-4.5 min-h-[64px] rounded-2xl transition-all duration-200 shadow-md flex items-center gap-3.5 btn-press cursor-pointer relative overflow-hidden">
+          <span class="w-7 h-7 rounded-xl bg-[#CACC90]/20 text-[#CACC90] border border-[#CACC90]/30 flex items-center justify-center font-bold text-xs shrink-0 group-hover:bg-[#CACC90] group-hover:text-[#151617] group-hover:border-transparent transition-all shadow-sm">${i+1}</span>
           <span class="text-sm sm:text-[15px] font-medium text-slate-100 leading-snug group-hover:text-white transition-colors">${escapeHtml(opt.text)}</span>
         </button>
       `).join('');
@@ -272,11 +316,11 @@
       cardContainer.innerHTML = `
         <div class="fade-in space-y-4">
           <div class="flex items-center justify-between">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 shadow-sm">
-              Вопрос ${index + 1} из ${crashQuestions.length}
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#CACC90]/15 text-[#CACC90] border border-[#CACC90]/30 shadow-sm">
+              Этап ${index + 1} из ${crashQuestions.length}
             </span>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-slate-50 leading-relaxed tracking-wide">${escapeHtml(q.question)}</h3>
+          <h3 class="font-serif text-lg sm:text-xl text-white leading-relaxed tracking-wide">${escapeHtml(q.question)}</h3>
           <div class="space-y-3.5 pt-1">${optionsHtml}</div>
         </div>
       `;
@@ -323,7 +367,7 @@
             shatter.classList.add('shatter-anim');
           }
 
-          // Отлетает ровно ОДНА деталь за прилет (по очереди)
+          // Отлетает ровно ОДНА деталь за прилет
           const partsList = [
             { el: partWheel, anim: 'fly-wheel' },
             { el: partDoor, anim: 'fly-door' },
@@ -370,18 +414,18 @@
     function renderResultScreen(pct) {
       stepTitle.textContent = "Краш-тест завершен!";
       let statusText = "🛡️ Ваша бухгалтерия выдержала проверки!";
-      if (pct > 35) statusText = "⚠️ Серьезные вмятины и риск штрафов";
+      if (pct > 35) statusText = "⚠️ Серьезные вмятины и риск налоговых претензий";
       if (pct > 65) statusText = "🚨 Бизнес в критической зоне риска!";
 
       cardContainer.innerHTML = `
         <div class="fade-in space-y-4 pt-1 text-center">
-          <div class="p-4 bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-2xl shadow-inner space-y-2">
-            <div class="text-xs sm:text-sm font-medium text-slate-300">${statusText}</div>
-            <div id="final-loss-counter" class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-amber-400 to-red-500">0 ₽</div>
-            <div class="text-xs text-slate-400">расчетные скрытые потери в год</div>
+          <div class="p-4 bg-[#151617] border border-[#354251] rounded-2xl shadow-inner space-y-2">
+            <div class="text-xs sm:text-sm font-medium text-[#999999]">${statusText}</div>
+            <div id="final-loss-counter" class="font-serif text-3xl sm:text-4xl font-bold text-[#F4EBBE]">0 ₽</div>
+            <div class="text-xs text-[#999999]">расчетные скрытые потери в год</div>
           </div>
-          <button id="btn-fix-car" class="w-full py-5 sm:py-6 px-6 sm:px-8 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-extrabold rounded-2xl text-lg sm:text-xl btn-pulse btn-press shadow-2xl shadow-emerald-500/40 transition-all flex items-center justify-center gap-3 border border-emerald-300/40 cursor-pointer">
-            🛠️ Получить план ремонта (20 мин бесплатно) →
+          <button id="btn-fix-car" class="iksweb btn-pulse w-full text-center py-4 px-6 text-base sm:text-lg flex items-center justify-center gap-2">
+            Получить экспресс аудит бесплатно →
           </button>
         </div>
       `;
@@ -417,48 +461,50 @@
   function renderDetailDrawer() {
     return `
       <div id="drawer-container" class="fixed inset-0 z-50 invisible transition-all duration-300">
-        <div id="drawer-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
-        <div id="drawer-panel" class="absolute bottom-0 left-0 right-0 max-w-xl mx-auto bg-[#1A1A2E] text-white rounded-t-3xl border-t border-slate-700 p-6 shadow-2xl translate-y-full transition-transform duration-300 flex flex-col max-h-[90vh]">
-          <div class="w-12 h-1.5 bg-slate-600 rounded-full mx-auto mb-4 cursor-pointer"></div>
-          <button id="drawer-close" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-800 text-slate-400">
+        <div id="drawer-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+        <div id="drawer-panel" class="absolute bottom-0 left-0 right-0 max-w-xl mx-auto bg-[#1E2021] text-white rounded-t-3xl border-t border-[#354251] p-6 shadow-2xl translate-y-full transition-transform duration-300 flex flex-col max-h-[90vh]">
+          <div class="w-12 h-1.5 bg-[#5F5F5F] rounded-full mx-auto mb-4 cursor-pointer"></div>
+          <button id="drawer-close" class="absolute top-4 right-4 p-2 rounded-full hover:bg-[#282a2c] text-[#999999] transition-colors">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
 
           <div class="overflow-y-auto pr-1 flex-1">
-            <div class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-2">
-              🛡️ 100% Финансовая ответственность
+            <div class="inline-block px-3 py-1 bg-[#CACC90]/15 border border-[#CACC90]/30 text-[#CACC90] text-xs font-semibold rounded-full mb-2">
+              🛡️ 10 000 000 ₽ Финансовая ответственность
             </div>
-            <h3 class="text-xl font-bold mb-2 text-white">План ремонта вашей бухгалтерии</h3>
-            <p class="text-slate-300 text-sm mb-4 leading-relaxed">
-              Забронируйте 15-минутный разбор с Главбухом. Мы проверим Личный кабинет ФНС, выявим риски и предложим 2 законных способа снизить налоги.
+            <h3 class="font-serif text-xl font-normal mb-2 text-white">
+              Бесплатный экспресс аудит <span class="italic text-[#F4EBBE]">вашей бухгалтерской базы</span>
+            </h3>
+            <p class="text-[#999999] text-sm mb-4 leading-relaxed">
+              Оставьте свой номер телефона. Наш эксперт свяжется с вами в течение рабочего дня, проверит базу 1С и подготовит индивидуальное КП под ваш бизнес.
             </p>
 
             <form id="booking-form" class="space-y-3">
               <div>
-                <label class="block text-xs text-slate-400 mb-1">Ваше имя</label>
-                <input type="text" id="user-name" required placeholder="Алексей" class="w-full px-4 py-3 bg-slate-800/80 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm" />
+                <label class="block text-xs text-[#999999] mb-1">Ваше имя</label>
+                <input type="text" id="user-name" required placeholder="Алексей" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm" />
               </div>
               <div>
                 <div class="flex justify-between items-center mb-1">
-                  <label class="block text-xs text-slate-400">Телефон</label>
-                  <span class="text-[10px] text-slate-500">Формат: +7 ХХХХХХХХХХ (11 цифр)</span>
+                  <label class="block text-xs text-[#999999]">Телефон</label>
+                  <span class="text-[10px] text-[#999999]">Формат: +7 ХХХХХХХХХХ (11 цифр)</span>
                 </div>
-                <input type="tel" id="user-phone" required placeholder="+7 (999) 000-00-00" class="w-full px-4 py-3 bg-slate-800/80 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm transition-colors" />
+                <input type="tel" id="user-phone" required placeholder="+7 (999) 000-00-00" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm transition-colors" />
               </div>
 
               <div id="drawer-error-box" class="hidden p-3 bg-red-500/20 border border-red-500/50 rounded-xl text-red-300 text-xs"></div>
 
-              <button type="submit" id="drawer-submit-btn" class="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl btn-press text-base mt-2 shadow-lg shadow-emerald-500/20">
-                Забронировать 15 минут бесплатно →
+              <button type="submit" id="drawer-submit-btn" class="iksweb w-full py-4 text-center justify-center font-bold text-base mt-2">
+                Получить экспресс аудит →
               </button>
             </form>
 
             <div id="drawer-success-box" class="hidden text-center py-6">
-              <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+              <div class="w-12 h-12 rounded-full bg-[#CACC90]/20 text-[#CACC90] flex items-center justify-center mx-auto mb-3">
                 <i data-lucide="check-circle" class="w-6 h-6"></i>
               </div>
-              <h4 class="text-lg font-bold text-white mb-1">Заявка принята!</h4>
-              <p class="text-xs text-slate-300">Наш Главный бухгалтер свяжется с вами в течение 15 минут.</p>
+              <h4 class="font-serif text-lg font-bold text-white mb-1">Заявка принята!</h4>
+              <p class="text-xs text-[#999999]">Наш Главный бухгалтер свяжется с вами в ближайшее время.</p>
             </div>
           </div>
         </div>
