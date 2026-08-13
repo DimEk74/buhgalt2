@@ -1,14 +1,30 @@
 /* ===========================================
-   styles.css — Кинематографичный Краш-Тест (SVG Rock Top-Left Edition)
+   styles.css — Дизайн-система в стилях Finexpert-e.ru
    =========================================== */
 
 :root {
-  --color-bg:      #0b0f19;
-  --color-text:    #f8fafc;
-  --color-muted:   #94a3b8;
-  --color-accent:  #10b981;
-  --color-surface: rgba(255, 255, 255, 0.04);
-  --color-border:  rgba(255, 255, 255, 0.08);
+  /* Цветовая палитра Finexpert */
+  --color-black:           #151617;
+  --color-black-rgb:       21, 22, 23;
+  --color-light-black:     #1E2021;
+  --color-beige:           #F1EEE8;
+  --color-gray:            #5F5F5F;
+  --color-light-gray:      #DEDEDE;
+  --color-text-light-gray: #999999;
+  --color-text-dark-gray:  #686868;
+  --color-soft-green:      #CACC90;
+  --color-gold:            #F4EBBE;
+  --color-green:           #5CB1AB;
+  --color-red:             #EF2323;
+
+  /* Переменные приложения */
+  --color-bg:      #151617;
+  --color-text:    #FFFFFF;
+  --color-muted:   #999999;
+  --color-accent:  #CACC90;
+  --color-surface: #1E2021;
+  --color-border:  #354251;
+  --button-base-br: 20px;
 }
 
 *, *::before, *::after {
@@ -18,12 +34,78 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   background-color: var(--color-bg);
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
+}
+
+/* ── Засечные заголовки в стиле Finexpert (21Cent / Playfair Display) ── */
+h1, h2, h3, .font-serif {
+  font-family: 'Playfair Display', '21Cent', Georgia, serif;
+  font-weight: 400;
+}
+
+h1 em, h2 em, h3 em, .font-serif em {
+  font-style: italic;
+  color: var(--color-gold);
+}
+
+.l-gray {
+  color: var(--color-text-light-gray);
+}
+.l-gray strong {
+  color: var(--color-text);
+}
+
+/* ── Кнопки в стиле Finexpert ── */
+.btn-soft-green, .iksweb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 14px 28px;
+  color: #151617;
+  background: var(--color-soft-green);
+  border-radius: var(--button-base-br);
+  border: 1px solid #354251;
+  transition: all 0.25s ease;
+}
+
+.btn-soft-green:hover, .iksweb:hover {
+  background: var(--color-gold);
+  color: #151617;
+  border-color: #1E2021;
+}
+
+.btn-green {
+  background: var(--color-green);
+  color: #FFFFFF;
+  border-radius: var(--button-base-br);
+  border: 1px solid var(--color-green);
+  transition: all 0.25s ease;
+}
+
+.btn-green:hover {
+  background: #4da099;
+}
+
+.btn-dark {
+  background: var(--color-light-black);
+  color: #FFFFFF;
+  border: 1px solid var(--color-gray);
+  border-radius: var(--button-base-br);
+  transition: all 0.25s ease;
+}
+
+.btn-dark:hover {
+  background: #282a2c;
 }
 
 .safe-top    { padding-top:    env(safe-area-inset-top,    0px); }
@@ -161,35 +243,39 @@ body {
 }
 
 @keyframes ctaPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  50% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(202, 204, 144, 0.7); }
+  50% { box-shadow: 0 0 0 15px rgba(202, 204, 144, 0); }
 }
 
 .btn-pulse {
-  animation: ctaPulse 2s infinite;
+  animation: ctaPulse 2.5s infinite;
 }
 
 .btn-press {
-  transition: transform 0.1s ease, opacity 0.1s ease;
+  transition: transform 0.15s ease, opacity 0.15s ease;
   cursor: pointer;
 }
 .btn-press:active {
-  transform: scale(0.96);
-  opacity: 0.85;
+  transform: scale(0.97);
+  opacity: 0.9;
 }
 
 .btn-primary {
   display: block;
   width: 100%;
-  padding: 14px 24px;
-  background: #10b981;
-  color: #064e3b;
+  padding: 16px 28px;
+  background: var(--color-soft-green);
+  color: #151617;
   font-size: 16px;
   font-weight: 700;
-  border: none;
-  border-radius: 14px;
+  border: 1px solid #354251;
+  border-radius: var(--button-base-br);
   cursor: pointer;
-  transition: transform 0.1s ease;
+  transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+  background: var(--color-gold);
 }
 
 /* ── Плавное появление вопросов и экранов ── */
@@ -208,9 +294,11 @@ body {
   animation: fadeInSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* ── Акцентная полоса при наведении на варианты ответов ── */
+/* ── Акцентная полоса при наведении на варианты ответов в стилях Finexpert ── */
 .quiz-opt-btn {
   will-change: transform, box-shadow;
+  background-color: var(--color-light-black) !important;
+  border: 1px solid var(--color-border) !important;
 }
 
 .quiz-opt-btn::before {
@@ -220,11 +308,16 @@ body {
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(180deg, #6366f1, #8b5cf6);
+  background: var(--color-soft-green);
   opacity: 0;
   transition: opacity 0.2s ease;
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
+}
+
+.quiz-opt-btn:hover {
+  border-color: var(--color-soft-green) !important;
+  background-color: #25282a !important;
 }
 
 .quiz-opt-btn:hover::before {
