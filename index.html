@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Краш-Тест Бухгалтерии 2026</title>
+  <title>Аутсорсинг Бухгалтерии | Краш-Тест 2026</title>
 
   <!--
-    🔒 Content Security Policy — разрешаем скрипты только с известных CDN.
+    🔒 Content Security Policy — разрешаем скрипты и шрифты с известных CDN.
   -->
   <meta http-equiv="Content-Security-Policy"
         content="
@@ -18,17 +18,17 @@
           style-src   'self' 'unsafe-inline'
                       https://fonts.googleapis.com
                       https://fonts.gstatic.com;
-          font-src    'self'
+          font-src    'self' data:
                       https://fonts.gstatic.com;
           img-src     'self' data: https:;
           media-src   'self' data: https:;
           connect-src 'self' https:;
         " />
 
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Inter + Playfair Display (Serif header font matching Finexpert 21Cent) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -42,12 +42,12 @@
   <!-- Стили проекта -->
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
-<body class="bg-[#0f172a] text-slate-100 min-h-screen">
+<body class="bg-[#151617] text-white min-h-screen antialiased">
 
   <!-- Корневой элемент приложения -->
   <div id="app"></div>
 
-  <!-- Точка входа (Автономный бандл — работает на любом хостинге и локально) -->
+  <!-- Точка входа (Автономный бандл) -->
   <script src="./js/app-bundle.js"></script>
 
 </body>
