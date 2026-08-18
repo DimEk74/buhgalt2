@@ -12,6 +12,7 @@
       if (isReady) return;
       isReady = true;
       _state = { user: user || {}, app: app || {}, colors: app?.colors };
+      _applyTheme(_state.colors);
       if (onReady) onReady(_state);
       _listeners.forEach(fn => fn(_state));
     };
@@ -19,7 +20,11 @@
     if (window.notibot && typeof window.notibot.onUpdate === 'function') {
       window.notibot.onUpdate((user, app) => handleReady(user, app));
     }
-    setTimeout(() => handleReady(_state.user, _state.app), 100);
+    setTimeout(() => handleReady(_state.user, _state.app), 120);
+  }
+
+  function getState() {
+    return _state;
   }
 
   function hapticImpact(style = 'medium') {
@@ -31,9 +36,39 @@
   }
 
   async function submitForm(formId, answers) {
-    if (window.notibot?.submitForm) return window.notibot.submitForm(formId, answers);
-    console.log("Mock submitForm:", formId, answers);
+    if (window.notibot && typeof window.notibot.submitForm === 'function') {
+      return new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new window.NotibotBridgeError({
+            origin: 'client',
+            code: 'ERR_RATE_LIMIT',
+            message: 'Превышено время ожидания ответа от Notibot (10 сек)'
+          }));
+        }, 10000);
+
+        window.notibot.submitForm(formId, answers)
+          .then((res) => {
+            clearTimeout(timeout);
+            resolve(res);
+          })
+          .catch((err) => {
+            clearTimeout(timeout);
+            reject(err);
+          });
+      });
+    }
+
+    console.log("Mock submitForm call (вне Notibot):", formId, answers);
     return new Promise((resolve) => setTimeout(() => resolve({ success: true }), 600));
+  }
+
+  function _applyTheme(colors) {
+    if (!colors) return;
+    const r = document.documentElement;
+    if (colors.background) r.style.setProperty('--color-bg', colors.background);
+    if (colors.textPrimary) r.style.setProperty('--color-text', colors.textPrimary);
+    if (colors.textSecondary) r.style.setProperty('--color-muted', colors.textSecondary);
+    if (colors.primaryMain) r.style.setProperty('--color-accent', colors.primaryMain);
   }
 
   // ── 2. Utils ───────────────────────────────────────────
@@ -140,7 +175,16 @@
   ];
 
   // ── 4. UI-Компонент Сцены ──────────────────────────────
-  function renderCrashTestQuiz() {
+  function renderCrashTestQuiz(state = {}) {
+    const user = state?.user;
+    const userName = user?.displayName || [user?.first_name, user?.last_name].filter(Boolean).join(' ') || user?.username || 'Гость';
+    const avatarUrl = user?.photo_url || user?.avatar || user?.photoUrl;
+    const initial = (userName[0] || 'Г').toUpperCase();
+
+    const userAvatarHtml = avatarUrl
+      ? `<img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(userName)}" class="w-6 h-6 rounded-full object-cover border border-[#CACC90]/40 shrink-0" />`
+      : `<div class="w-6 h-6 rounded-full bg-[#CACC90]/20 text-[#CACC90] font-bold text-[10px] flex items-center justify-center border border-[#CACC90]/30 shrink-0">${escapeHtml(initial)}</div>`;
+
     return `
       <!-- Top Site Header Finexpert -->
       <header class="w-full max-w-2xl mx-auto mb-4 px-2 pt-3">
@@ -154,15 +198,18 @@
             </div>
           </div>
 
-          <!-- Contacts -->
-          <div class="hidden sm:flex items-center gap-4 text-xs text-[#999999]">
-            <div class="flex flex-col text-right">
+          <!-- Notibot User Profile & Contacts -->
+          <div class="flex items-center gap-3">
+            <!-- Notibot User Avatar & Name -->
+            <div id="notibot-user-badge" class="flex items-center gap-2 px-3 py-1.5 bg-[#1E2021] border border-[#354251] rounded-full text-xs shadow-sm">
+              ${userAvatarHtml}
+              <span class="text-slate-200 font-medium text-xs truncate max-w-[120px]">${escapeHtml(userName)}</span>
+            </div>
+
+            <div class="hidden sm:flex flex-col text-right text-xs text-[#999999]">
               <a href="tel:88006002506" class="text-white font-semibold hover:text-[#CACC90] transition-colors">8 (800) 600-25-06</a>
               <span>Екатеринбург, Горького 65</span>
             </div>
-            <button type="button" onclick="document.getElementById('btn-fix-car')?.click() || window.open('https://finexpert-e.ru', '_blank')" class="px-3.5 py-1.5 bg-[#CACC90] text-[#151617] text-xs font-semibold rounded-full hover:bg-[#F4EBBE] transition-colors">
-              Консультация
-            </button>
           </div>
         </div>
 
@@ -476,35 +523,52 @@
               Бесплатный экспресс аудит <span class="italic text-[#F4EBBE]">вашей бухгалтерской базы</span>
             </h3>
             <p id="drawer-desc" class="text-[#999999] text-sm mb-4 leading-relaxed transition-all">
-              Оставьте свой номер телефона. Наш эксперт свяжется с вами в течение рабочего дня, проверит базу 1С и подготовит индивидуальное КП под ваш бизнес.
+              Заполните форму, и наш эксперт свяжется с вами в течение рабочего дня, проверит базу 1С и подготовит индивидуальное КП.
             </p>
 
             <form id="booking-form" class="space-y-3">
               <div>
-                <label for="user-name" class="block text-xs text-[#999999] mb-1">Ваше имя</label>
+                <label for="user-name" class="block text-xs text-[#999999] mb-1">Ваше имя <span class="text-red-400">*</span></label>
                 <input type="text" id="user-name" name="name" autocomplete="name" enterkeyhint="next" required placeholder="Алексей" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm" />
               </div>
+
               <div>
                 <div class="flex justify-between items-center mb-1">
-                  <label for="user-phone" class="block text-xs text-[#999999]">Телефон</label>
+                  <label for="user-phone" class="block text-xs text-[#999999]">Телефон для связи с Вами <span class="text-red-400">*</span></label>
                   <span class="text-[10px] text-[#999999]">Формат: +7 ХХХХХХХХХХ (11 цифр)</span>
                 </div>
-                <input type="tel" id="user-phone" name="phone" inputmode="tel" autocomplete="tel" enterkeyhint="done" required placeholder="+7 (999) 000-00-00" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm transition-colors" />
+                <input type="tel" id="user-phone" name="phone" inputmode="tel" autocomplete="tel" enterkeyhint="next" required placeholder="+7 (999) 000-00-00" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm transition-colors" />
               </div>
 
-              <div id="drawer-error-box" class="hidden p-3 bg-red-500/20 border border-red-500/50 rounded-xl text-red-300 text-xs"></div>
+              <div>
+                <label for="user-email" class="block text-xs text-[#999999] mb-1">E-mail, на случай если не дозвонимся <span class="text-red-400">*</span></label>
+                <input type="email" id="user-email" name="email" autocomplete="email" enterkeyhint="next" required placeholder="name@domain.ru" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm" />
+              </div>
+
+              <div>
+                <label for="user-datetime" class="block text-xs text-[#999999] mb-1">Удобная дата для консультации <span class="text-slate-500">(необязательно)</span></label>
+                <input type="datetime-local" id="user-datetime" name="datetime" enterkeyhint="done" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm text-slate-300" />
+              </div>
+
+              <div id="drawer-error-box" class="hidden p-3 bg-red-500/20 border border-red-500/50 rounded-xl text-red-300 text-xs leading-relaxed"></div>
 
               <button type="submit" id="drawer-submit-btn" class="iksweb w-full py-4 text-center justify-center font-bold text-base mt-2">
                 Получить экспресс аудит →
               </button>
             </form>
 
-            <div id="drawer-success-box" class="hidden text-center py-6">
-              <div class="w-12 h-12 rounded-full bg-[#CACC90]/20 text-[#CACC90] flex items-center justify-center mx-auto mb-3">
+            <div id="drawer-success-box" class="hidden text-center py-6 space-y-3">
+              <div class="w-12 h-12 rounded-full bg-[#CACC90]/20 text-[#CACC90] flex items-center justify-center mx-auto">
                 <i data-lucide="check-circle" class="w-6 h-6"></i>
               </div>
-              <h4 class="font-serif text-lg font-bold text-white mb-1">Заявка принята!</h4>
-              <p class="text-xs text-[#999999]">Наш Главный бухгалтер свяжется с вами в ближайшее время.</p>
+              <h4 class="font-serif text-lg font-bold text-white">Заявка принята!</h4>
+              <div class="text-xs text-[#999999] leading-relaxed max-w-sm mx-auto space-y-2">
+                <p>Благодарим Вас за обращение!<br/>Мы скоро свяжемся с Вами. В случае связи по телефону, мы будем звонить с номеров:</p>
+                <div class="font-semibold text-[#F4EBBE] text-sm bg-[#151617] py-2 px-3 rounded-xl border border-[#354251] inline-block">
+                  8 (800) 600-25-06 &nbsp;или&nbsp; +7 (343) 386-20-00
+                </div>
+                <p class="text-[11px] text-slate-400">Можете добавить их в свою книгу контактов под именем «Финэксперт-Екатеринбург»</p>
+              </div>
             </div>
           </div>
         </div>
@@ -519,6 +583,7 @@
     const errorBox = containerEl.querySelector('#drawer-error-box');
     const successBox = containerEl.querySelector('#drawer-success-box');
     const phoneInput = containerEl.querySelector('#user-phone');
+    const emailInput = containerEl.querySelector('#user-email');
     const scrollContent = containerEl.querySelector('#drawer-scroll-content') || containerEl.querySelector('.overflow-y-auto');
     const drawerPanel = containerEl.querySelector('#drawer-panel');
     const drawerBadge = containerEl.querySelector('#drawer-badge');
@@ -528,6 +593,22 @@
       containerEl.classList.add('drawer-visible');
       hapticImpact('medium');
       if (scrollContent) scrollContent.scrollTop = 0;
+
+      // Предзаполнение данных из Notibot
+      const user = getState()?.user;
+      if (user) {
+        const nameInput = containerEl.querySelector('#user-name');
+        if (nameInput && !nameInput.value) {
+          nameInput.value = user.displayName || [user.first_name, user.last_name].filter(Boolean).join(' ') || user.username || '';
+        }
+        if (phoneInput && !phoneInput.value && (user.phone || user.phone_number)) {
+          phoneInput.value = user.phone || user.phone_number;
+          phoneInput.dispatchEvent(new Event('input'));
+        }
+        if (emailInput && !emailInput.value && user.email) {
+          emailInput.value = user.email;
+        }
+      }
     };
 
     const closeDrawer = () => {
@@ -655,15 +736,17 @@
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('user-name')?.value;
-        const phone = phoneInput ? phoneInput.value : '';
-        const digits = phone.replace(/\D/g, '');
+        const name = document.getElementById('user-name')?.value?.trim();
+        const phoneInputVal = phoneInput ? phoneInput.value : '';
+        const digits = phoneInputVal.replace(/\D/g, '');
+        const email = document.getElementById('user-email')?.value?.trim();
+        const datetime = document.getElementById('user-datetime')?.value?.trim();
 
-        // 🔒 Валидация длины номера: ровно 11 цифр (+7 ХХХХХХХХХХ)
+        // 🔒 Валидация телефона (11 цифр)
         if (digits.length !== 11 || !digits.startsWith('7')) {
           if (errorBox) {
             errorBox.classList.remove('hidden');
-            errorBox.innerHTML = `⚠️ <b>Ошибка номера:</b> Номер должен содержать ровно 11 цифр в формате <b>+7 ХХХХХХХХХХ</b> (введено: ${digits.length}).`;
+            errorBox.textContent = `⚠️ Ошибка номера: Введите ровно 11 цифр в формате +7 ХХХХХХХХХХ (введено: ${digits.length}).`;
           }
           if (phoneInput) {
             phoneInput.classList.add('border-red-500', 'ring-2', 'ring-red-500/50');
@@ -673,19 +756,55 @@
           return;
         }
 
+        // 🔒 Валидация Email
+        if (!email || !email.includes('@')) {
+          if (errorBox) {
+            errorBox.classList.remove('hidden');
+            errorBox.textContent = '⚠️ Ошибка ввода: Укажите корректный E-mail адрес.';
+          }
+          const emailEl = document.getElementById('user-email');
+          if (emailEl) emailEl.focus();
+          hapticImpact('heavy');
+          return;
+        }
+
         errorBox.classList.add('hidden');
+
+        // 🔥 Ответы строго по схеме form_lead_int.json (formId: "3ssRZEmG4YSsgDGlL0KV3O")
+        const FORM_ID = "3ssRZEmG4YSsgDGlL0KV3O";
+        const answers = [
+          { title: "Ваше имя", answers: name ? [name] : [] },
+          { title: "Телефон для связи с Вами", answers: phoneInputVal ? [phoneInputVal] : [] },
+          { title: "E-mail, на случай если не дозвонимся", answers: email ? [email] : [] },
+          { title: "Удобная дата для консультации", answers: datetime ? [datetime] : [] }
+        ];
+
         try {
-          await submitForm("crash_test_booking", [
-            { title: "Имя", answers: name ? [name] : [] },
-            { title: "Телефон", answers: phone ? [phone] : [] }
-          ]);
+          await submitForm(FORM_ID, answers);
           form.classList.add('hidden');
           successBox.classList.remove('hidden');
-          if (scrollContent) scrollContent.style.paddingBottom = '';
+          disableCompactKeyboardMode();
+          if (drawerPanel) {
+            drawerPanel.style.bottom = '';
+            drawerPanel.style.maxHeight = '';
+          }
           hapticImpact('heavy');
-        } catch (err) {
+        } catch (error) {
           errorBox.classList.remove('hidden');
-          errorBox.textContent = escapeHtml(err?.message || "Ошибка отправки. Попробуйте еще раз.");
+          if (error instanceof window.NotibotBridgeError || error?.name === 'NotibotBridgeError' || error?.code) {
+            if (error.code === 'ERR_RATE_LIMIT') {
+              errorBox.textContent = "Слишком частые запросы. Пожалуйста, подождите 10 секунд.";
+            } else if (error.code === 'ERR_VALIDATION_FAILED') {
+              errorBox.textContent = `Ошибка валидации: ${error.message}`;
+            } else if (error.code === 'ERR_INVALID_PAYLOAD') {
+              errorBox.textContent = `Ошибка формата данных: ${error.message}`;
+            } else {
+              errorBox.textContent = `Ошибка Notibot Bridge [${error.code || 'ERR_UNKNOWN'}]: ${error.message || 'Не удалось отправить форму'}`;
+            }
+          } else {
+            errorBox.textContent = `Ошибка отправки: ${error?.message || 'Неизвестная ошибка'}`;
+          }
+          hapticImpact('heavy');
         }
       });
     }
@@ -695,7 +814,13 @@
   }
 
   // ── 6. Главная точка входа ──────────────────────────────
-  function initApp() {
+  function initApp(state) {
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) {
+      loadingEl.style.opacity = '0';
+      setTimeout(() => { loadingEl.style.display = 'none'; }, 300);
+    }
+
     const appEl = document.getElementById('app');
     if (!appEl) return;
 
@@ -711,7 +836,7 @@
           </p>
         </header>
 
-        ${renderCrashTestQuiz()}
+        ${renderCrashTestQuiz(state)}
         ${renderDetailDrawer()}
       </main>
     `;
