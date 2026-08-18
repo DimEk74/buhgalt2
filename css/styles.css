@@ -230,6 +230,18 @@ h1 em, h2 em, h3 em, .font-serif em {
 .fly-glass { animation: flyOffGlassSlow 2.5s cubic-bezier(0.18, 0.82, 0.3, 1) forwards !important; }
 
 /* ── Модальная шторка (Bottom Sheet Drawer) ── */
+#drawer-panel {
+  max-height: 85vh;
+  max-height: 85dvh;
+  overscroll-behavior: contain;
+}
+
+#drawer-scroll-content {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+}
+
 .drawer-visible {
   visibility: visible !important;
 }
