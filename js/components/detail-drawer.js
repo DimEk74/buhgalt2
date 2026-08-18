@@ -8,13 +8,13 @@ export function renderDetailDrawer() {
   return `
     <div id="drawer-container" class="fixed inset-0 z-50 invisible transition-all duration-300">
       <div id="drawer-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
-      <div id="drawer-panel" class="absolute bottom-0 left-0 right-0 max-w-xl mx-auto bg-[#1E2021] text-white rounded-t-3xl border-t border-[#354251] p-6 shadow-2xl translate-y-full transition-transform duration-300 flex flex-col max-h-[90vh]">
-        <div class="w-12 h-1.5 bg-[#5F5F5F] rounded-full mx-auto mb-4 cursor-pointer"></div>
-        <button id="drawer-close" class="absolute top-4 right-4 p-2 rounded-full hover:bg-[#282a2c] text-[#999999] transition-colors">
+      <div id="drawer-panel" class="absolute bottom-0 left-0 right-0 max-w-xl mx-auto bg-[#1E2021] text-white rounded-t-3xl border-t border-[#354251] p-5 sm:p-6 shadow-2xl translate-y-full transition-all duration-300 flex flex-col max-h-[85vh] max-h-[85dvh]">
+        <div class="w-12 h-1.5 bg-[#5F5F5F] rounded-full mx-auto mb-3 cursor-pointer shrink-0"></div>
+        <button id="drawer-close" aria-label="Закрыть" class="absolute top-4 right-4 p-2 rounded-full hover:bg-[#282a2c] text-[#999999] transition-colors z-10">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
 
-        <div class="overflow-y-auto pr-1 flex-1">
+        <div id="drawer-scroll-content" class="overflow-y-auto pr-1 flex-1 transition-all duration-200" style="-webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
           <div class="inline-block px-3 py-1 bg-[#CACC90]/15 border border-[#CACC90]/30 text-[#CACC90] text-xs font-semibold rounded-full mb-2">
             🛡️ 10 000 000 ₽ Финансовая ответственность
           </div>
@@ -27,15 +27,15 @@ export function renderDetailDrawer() {
 
           <form id="booking-form" class="space-y-3">
             <div>
-              <label class="block text-xs text-[#999999] mb-1">Ваше имя</label>
-              <input type="text" id="user-name" required placeholder="Алексей" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm" />
+              <label for="user-name" class="block text-xs text-[#999999] mb-1">Ваше имя</label>
+              <input type="text" id="user-name" name="name" autocomplete="name" enterkeyhint="next" required placeholder="Алексей" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm" />
             </div>
             <div>
               <div class="flex justify-between items-center mb-1">
-                <label class="block text-xs text-[#999999]">Телефон</label>
+                <label for="user-phone" class="block text-xs text-[#999999]">Телефон</label>
                 <span class="text-[10px] text-[#999999]">Формат: +7 ХХХХХХХХХХ (11 цифр)</span>
               </div>
-              <input type="tel" id="user-phone" required placeholder="+7 (999) 000-00-00" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm transition-colors" />
+              <input type="tel" id="user-phone" name="phone" inputmode="tel" autocomplete="tel" enterkeyhint="done" required placeholder="+7 (999) 000-00-00" class="w-full px-4 py-3 bg-[#151617] border border-[#354251] rounded-xl text-white focus:outline-none focus:border-[#CACC90] text-sm transition-colors" />
             </div>
 
             <div id="drawer-error-box" class="hidden p-3 bg-red-500/20 border border-red-500/50 rounded-xl text-red-300 text-xs"></div>
@@ -65,21 +65,77 @@ export function setupDrawerBehavior(containerEl) {
   const errorBox = containerEl.querySelector('#drawer-error-box');
   const successBox = containerEl.querySelector('#drawer-success-box');
   const phoneInput = containerEl.querySelector('#user-phone');
+  const scrollContent = containerEl.querySelector('#drawer-scroll-content') || containerEl.querySelector('.overflow-y-auto');
+  const drawerPanel = containerEl.querySelector('#drawer-panel');
 
   const openDrawer = () => {
     containerEl.classList.add('drawer-visible');
-    document.body.style.overflow = 'hidden';
     hapticImpact('medium');
+    if (scrollContent) scrollContent.scrollTop = 0;
   };
 
   const closeDrawer = () => {
     containerEl.classList.remove('drawer-visible');
-    document.body.style.overflow = '';
+    if (scrollContent) scrollContent.style.paddingBottom = '';
+    if (drawerPanel) drawerPanel.style.maxHeight = '';
     hapticSelection();
   };
 
   if (backdrop) backdrop.addEventListener('click', closeDrawer);
   if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+
+  // 📱 Адаптация под мобильную клавиатуру (Scroll & Viewport)
+  const formInputs = form ? form.querySelectorAll('input') : [];
+  formInputs.forEach(input => {
+    input.addEventListener('focus', () => {
+      if (scrollContent) {
+        scrollContent.style.paddingBottom = '180px';
+      }
+      setTimeout(() => {
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 250);
+    });
+
+    input.addEventListener('blur', () => {
+      setTimeout(() => {
+        const active = document.activeElement;
+        if (!active || (active.tagName !== 'INPUT' && active.tagName !== 'BUTTON')) {
+          if (scrollContent) {
+            scrollContent.style.paddingBottom = '';
+          }
+        }
+      }, 200);
+    });
+  });
+
+  if (window.visualViewport) {
+    const handleViewportChange = () => {
+      if (!containerEl.classList.contains('drawer-visible')) return;
+      const vvHeight = window.visualViewport.height;
+      const winHeight = window.innerHeight;
+
+      if (winHeight - vvHeight > 100) {
+        if (drawerPanel) {
+          drawerPanel.style.maxHeight = `${Math.max(260, vvHeight - 16)}px`;
+        }
+        if (scrollContent) {
+          scrollContent.style.paddingBottom = '160px';
+        }
+        const activeInput = document.activeElement;
+        if (activeInput && activeInput.tagName === 'INPUT') {
+          activeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else {
+        if (drawerPanel) drawerPanel.style.maxHeight = '';
+        if (scrollContent && document.activeElement?.tagName !== 'INPUT') {
+          scrollContent.style.paddingBottom = '';
+        }
+      }
+    };
+
+    window.visualViewport.addEventListener('resize', handleViewportChange);
+    window.visualViewport.addEventListener('scroll', handleViewportChange);
+  }
 
   // 📞 Маска и форматирование телефона на лету
   if (phoneInput) {
@@ -147,6 +203,7 @@ export function setupDrawerBehavior(containerEl) {
         ]);
         form.classList.add('hidden');
         successBox.classList.remove('hidden');
+        if (scrollContent) scrollContent.style.paddingBottom = '';
         hapticImpact('heavy');
       } catch (err) {
         errorBox.classList.remove('hidden');
@@ -158,3 +215,4 @@ export function setupDrawerBehavior(containerEl) {
   initIcons();
   return { open: openDrawer, close: closeDrawer };
 }
+
