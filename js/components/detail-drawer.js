@@ -15,13 +15,13 @@ export function renderDetailDrawer() {
         </button>
 
         <div id="drawer-scroll-content" class="overflow-y-auto pr-1 flex-1 transition-all duration-200" style="-webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
-          <div class="inline-block px-3 py-1 bg-[#CACC90]/15 border border-[#CACC90]/30 text-[#CACC90] text-xs font-semibold rounded-full mb-2">
+          <div id="drawer-badge" class="inline-block px-3 py-1 bg-[#CACC90]/15 border border-[#CACC90]/30 text-[#CACC90] text-xs font-semibold rounded-full mb-2 transition-all">
             🛡️ 10 000 000 ₽ Финансовая ответственность
           </div>
           <h3 class="font-serif text-xl font-normal mb-2 text-white">
             Бесплатный экспресс аудит <span class="italic text-[#F4EBBE]">вашей бухгалтерской базы</span>
           </h3>
-          <p class="text-[#999999] text-sm mb-4 leading-relaxed">
+          <p id="drawer-desc" class="text-[#999999] text-sm mb-4 leading-relaxed transition-all">
             Оставьте свой номер телефона. Наш эксперт свяжется с вами в течение рабочего дня, проверит базу 1С и подготовит индивидуальное КП под ваш бизнес.
           </p>
 
@@ -67,6 +67,8 @@ export function setupDrawerBehavior(containerEl) {
   const phoneInput = containerEl.querySelector('#user-phone');
   const scrollContent = containerEl.querySelector('#drawer-scroll-content') || containerEl.querySelector('.overflow-y-auto');
   const drawerPanel = containerEl.querySelector('#drawer-panel');
+  const drawerBadge = containerEl.querySelector('#drawer-badge');
+  const drawerDesc = containerEl.querySelector('#drawer-desc');
 
   const openDrawer = () => {
     containerEl.classList.add('drawer-visible');
@@ -75,60 +77,82 @@ export function setupDrawerBehavior(containerEl) {
   };
 
   const closeDrawer = () => {
-    containerEl.classList.remove('drawer-visible');
+    containerEl.classList.remove('drawer-visible', 'keyboard-active');
+    if (drawerPanel) {
+      drawerPanel.style.bottom = '';
+      drawerPanel.style.maxHeight = '';
+    }
+    if (drawerBadge) drawerBadge.style.display = '';
+    if (drawerDesc) drawerDesc.style.display = '';
     if (scrollContent) scrollContent.style.paddingBottom = '';
-    if (drawerPanel) drawerPanel.style.maxHeight = '';
     hapticSelection();
   };
 
   if (backdrop) backdrop.addEventListener('click', closeDrawer);
   if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
 
-  // 📱 Адаптация под мобильную клавиатуру (Scroll & Viewport)
+  const enableCompactKeyboardMode = () => {
+    containerEl.classList.add('keyboard-active');
+    if (drawerBadge) drawerBadge.style.display = 'none';
+    if (drawerDesc) drawerDesc.style.display = 'none';
+  };
+
+  const disableCompactKeyboardMode = () => {
+    containerEl.classList.remove('keyboard-active');
+    if (drawerBadge) drawerBadge.style.display = '';
+    if (drawerDesc) drawerDesc.style.display = '';
+  };
+
+  // 📱 Адаптация под фокус полей ввода
   const formInputs = form ? form.querySelectorAll('input') : [];
   formInputs.forEach(input => {
     input.addEventListener('focus', () => {
-      if (scrollContent) {
-        scrollContent.style.paddingBottom = '180px';
-      }
+      enableCompactKeyboardMode();
       setTimeout(() => {
         input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 250);
+      }, 200);
     });
 
     input.addEventListener('blur', () => {
       setTimeout(() => {
         const active = document.activeElement;
         if (!active || (active.tagName !== 'INPUT' && active.tagName !== 'BUTTON')) {
-          if (scrollContent) {
-            scrollContent.style.paddingBottom = '';
+          disableCompactKeyboardMode();
+          if (drawerPanel) {
+            drawerPanel.style.bottom = '';
+            drawerPanel.style.maxHeight = '';
           }
         }
       }, 200);
     });
   });
 
+  // 📱 Подъем шторки НАД клавиатурой (VisualViewport)
   if (window.visualViewport) {
     const handleViewportChange = () => {
       if (!containerEl.classList.contains('drawer-visible')) return;
-      const vvHeight = window.visualViewport.height;
+      const vv = window.visualViewport;
       const winHeight = window.innerHeight;
+      const kbdHeight = Math.max(0, winHeight - vv.height - vv.offsetTop);
 
-      if (winHeight - vvHeight > 100) {
+      if (kbdHeight > 100 || (document.activeElement && document.activeElement.tagName === 'INPUT')) {
+        enableCompactKeyboardMode();
         if (drawerPanel) {
-          drawerPanel.style.maxHeight = `${Math.max(260, vvHeight - 16)}px`;
-        }
-        if (scrollContent) {
-          scrollContent.style.paddingBottom = '160px';
+          const safeBottom = Math.max(kbdHeight, 0);
+          drawerPanel.style.bottom = `${safeBottom}px`;
+          drawerPanel.style.maxHeight = `${Math.max(220, vv.height - 12)}px`;
         }
         const activeInput = document.activeElement;
         if (activeInput && activeInput.tagName === 'INPUT') {
           activeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       } else {
-        if (drawerPanel) drawerPanel.style.maxHeight = '';
-        if (scrollContent && document.activeElement?.tagName !== 'INPUT') {
-          scrollContent.style.paddingBottom = '';
+        if (document.activeElement?.tagName !== 'INPUT') {
+          disableCompactKeyboardMode();
+          if (drawerPanel) {
+            drawerPanel.style.bottom = '';
+            drawerPanel.style.maxHeight = '';
+          }
         }
       }
     };
@@ -203,7 +227,11 @@ export function setupDrawerBehavior(containerEl) {
         ]);
         form.classList.add('hidden');
         successBox.classList.remove('hidden');
-        if (scrollContent) scrollContent.style.paddingBottom = '';
+        disableCompactKeyboardMode();
+        if (drawerPanel) {
+          drawerPanel.style.bottom = '';
+          drawerPanel.style.maxHeight = '';
+        }
         hapticImpact('heavy');
       } catch (err) {
         errorBox.classList.remove('hidden');
