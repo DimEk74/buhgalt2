@@ -114,7 +114,7 @@ def main():
         dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
 
         for file in files:
-            if file in EXCLUDE_FILES or file.endswith(".pyc"):
+            if file in EXCLUDE_FILES or file.endswith(".pyc") or file.endswith(".txt"):
                 continue
 
             full_path = os.path.join(root, file)
