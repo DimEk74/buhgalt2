@@ -2,15 +2,26 @@
 // Главная точка входа приложения.
 
 import { initIcons } from './utils.js';
-import { initBridge } from './bridge.js';
+import { initBridge, onStateUpdate } from './bridge.js';
 import { renderCrashTestQuiz, initCrashTestQuiz } from './components/crash-test-quiz.js';
 import { renderDetailDrawer, setupDrawerBehavior } from './components/detail-drawer.js';
 
 /**
  * Инициализация приложения.
+ * @param {Object} state — состояние Notibot Bridge { user, app, colors }
  */
-function initApp() {
+function initApp(state) {
+  // Скрываем экран загрузки (Loader)
+  const loadingEl = document.getElementById('loading');
+  if (loadingEl) {
+    loadingEl.style.opacity = '0';
+    setTimeout(() => {
+      loadingEl.style.display = 'none';
+    }, 300);
+  }
+
   const appEl = document.getElementById('app');
+  if (!appEl) return;
 
   // Монтируем компоненты в DOM
   appEl.innerHTML = `
@@ -27,7 +38,7 @@ function initApp() {
       </header>
 
       <!-- Интерактивный Квиз -->
-      ${renderCrashTestQuiz()}
+      ${renderCrashTestQuiz(state)}
 
       <!-- Всплывашка Drawer -->
       ${renderDetailDrawer()}
@@ -42,7 +53,8 @@ function initApp() {
 }
 
 // Запуск после инициализации Notibot Bridge
-initBridge(() => {
-  initApp();
+initBridge(function(state) {
+  initApp(state);
 });
+
 
