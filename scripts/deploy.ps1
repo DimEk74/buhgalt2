@@ -12,7 +12,7 @@ $ProjectRoot = (Resolve-Path "$PSScriptRoot\..").Path
 Write-Host "Deploying files from $ProjectRoot to $Owner/$Repo ..." -ForegroundColor Cyan
 
 $Files = Get-ChildItem -Path $ProjectRoot -Recurse -File | Where-Object { 
-    $_.FullName -notmatch '\\(\.git|\.gemini|node_modules|\.agents|scratch)' -and $_.Name -ne '.DS_Store'
+    $_.FullName -notmatch '\\(\.git|\.gemini|node_modules|\.agents|scratch)' -and $_.Name -ne '.DS_Store' -and $_.Extension -ne '.txt'
 }
 
 $SuccessCount = 0
