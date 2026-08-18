@@ -5,7 +5,16 @@ import { crashQuestions } from './crash-test-data.js';
 import { formatPrice, escapeHtml, initIcons } from '../utils.js';
 import { hapticImpact } from '../bridge.js';
 
-export function renderCrashTestQuiz() {
+export function renderCrashTestQuiz(state = {}) {
+  const user = state?.user;
+  const userName = user?.displayName || [user?.first_name, user?.last_name].filter(Boolean).join(' ') || user?.username || 'Гость';
+  const avatarUrl = user?.photo_url || user?.avatar || user?.photoUrl;
+  const initial = (userName[0] || 'Г').toUpperCase();
+
+  const userAvatarHtml = avatarUrl
+    ? `<img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(userName)}" class="w-6 h-6 rounded-full object-cover border border-[#CACC90]/40 shrink-0" />`
+    : `<div class="w-6 h-6 rounded-full bg-[#CACC90]/20 text-[#CACC90] font-bold text-[10px] flex items-center justify-center border border-[#CACC90]/30 shrink-0">${escapeHtml(initial)}</div>`;
+
   return `
     <!-- Top Site Header Finexpert -->
     <header class="w-full max-w-2xl mx-auto mb-4 px-2 pt-3">
@@ -19,15 +28,18 @@ export function renderCrashTestQuiz() {
           </div>
         </div>
 
-        <!-- Contacts -->
-        <div class="hidden sm:flex items-center gap-4 text-xs text-[#999999]">
-          <div class="flex flex-col text-right">
+        <!-- Notibot User Profile & Contacts -->
+        <div class="flex items-center gap-3">
+          <!-- Notibot User Avatar & Name -->
+          <div id="notibot-user-badge" class="flex items-center gap-2 px-3 py-1.5 bg-[#1E2021] border border-[#354251] rounded-full text-xs shadow-sm">
+            ${userAvatarHtml}
+            <span class="text-slate-200 font-medium text-xs truncate max-w-[120px]">${escapeHtml(userName)}</span>
+          </div>
+
+          <div class="hidden sm:flex flex-col text-right text-xs text-[#999999]">
             <a href="tel:88006002506" class="text-white font-semibold hover:text-[#CACC90] transition-colors">8 (800) 600-25-06</a>
             <span>Екатеринбург, Горького 65</span>
           </div>
-          <button type="button" onclick="document.getElementById('btn-fix-car')?.click() || window.open('https://finexpert-e.ru', '_blank')" class="px-3.5 py-1.5 bg-[#CACC90] text-[#151617] text-xs font-semibold rounded-full hover:bg-[#F4EBBE] transition-colors">
-            Консультация
-          </button>
         </div>
       </div>
 
