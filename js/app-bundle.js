@@ -257,64 +257,51 @@
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none"></div>
           <div id="damage-filter-overlay" class="absolute inset-0 opacity-0 bg-red-900/40 mix-blend-color-burn transition-opacity duration-300 pointer-events-none"></div>
 
-          <!-- Вспышка на всю сцену при детонации (Lens Bloom Flash) -->
-          <div id="blast-scene-flash" class="absolute inset-0 bg-amber-200/50 mix-blend-screen opacity-0 pointer-events-none z-30"></div>
+          <!-- Вспышка на всю сцену при детонации -->
+          <div id="blast-scene-flash" class="absolute inset-0 bg-amber-200/40 mix-blend-screen opacity-0 pointer-events-none z-30"></div>
 
-          <!-- 1. Натуральный 3D Гранитный Камень (Динамичный прилет) -->
-          <img id="strike-rock" src="./img/rock.svg" alt="Камень" class="absolute top-10 left-1/2 -translate-x-1/2 w-14 h-14 z-38 opacity-0 pointer-events-none drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)]" />
+          <!-- 1. Натуральный 3D Гранитный Камень (Компактный и легкий) -->
+          <img id="strike-rock" src="./img/rock.svg" alt="Камень" class="absolute top-12 left-1/2 -translate-x-1/2 w-10 h-10 z-38 opacity-0 pointer-events-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]" />
 
-          <!-- 2. Кольцевая ударная волна Маха (Mach Shockwave Ring) -->
-          <div id="mach-shockwave" class="absolute top-20 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full border-4 border-[#FEF08A] z-34 opacity-0 pointer-events-none mix-blend-screen"></div>
+          <!-- 2. Кольцевая ударная волна (Компактная) -->
+          <div id="mach-shockwave" class="absolute top-20 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full border-2 border-[#FEF08A] z-34 opacity-0 pointer-events-none mix-blend-screen"></div>
 
-          <!-- 3. Кинематографичный Голливудский Огненный Шар Взрыва (Blockbuster Fireball) -->
-          <div id="explosion-fireball" class="absolute top-20 left-1/2 w-40 h-40 z-36 pointer-events-none opacity-0 flex items-center justify-center">
-            <svg viewBox="0 0 140 140" class="w-full h-full filter drop-shadow-[0_0_40px_#f97316]">
-              <defs>
-                <radialGradient id="nukeCore2" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#ffffff" />
-                  <stop offset="18%" stop-color="#fef08a" />
-                  <stop offset="42%" stop-color="#f97316" />
-                  <stop offset="70%" stop-color="#dc2626" />
-                  <stop offset="90%" stop-color="#7f1d1d" />
-                  <stop offset="100%" stop-color="transparent" />
-                </radialGradient>
-                <radialGradient id="plasmaInner2" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#ffffff" />
-                  <stop offset="35%" stop-color="#fef08a" />
-                  <stop offset="75%" stop-color="#f97316" stop-opacity="0.85" />
-                  <stop offset="100%" stop-color="transparent" />
-                </radialGradient>
-              </defs>
-              <path d="M70 4 Q92 20 120 10 Q112 44 134 60 Q108 82 122 115 Q90 104 76 136 Q56 115 22 126 Q36 92 8 70 Q32 56 22 22 Q50 36 70 4 Z" fill="url(#nukeCore2)"/>
-              <circle cx="70" cy="70" r="38" fill="url(#plasmaInner2)"/>
-              <circle cx="70" cy="70" r="20" fill="#ffffff" opacity="0.95"/>
+          <!-- 3. Огненный Шар Взрыва (Уменьшен в 3 раза: w-14 h-14) -->
+          <div id="explosion-fireball" class="absolute top-20 left-1/2 w-14 h-14 z-36 pointer-events-none opacity-0 flex items-center justify-center">
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <radialGradient id="nukeCore2" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="25%" stop-color="#fef08a" />
+                <stop offset="55%" stop-color="#f97316" />
+                <stop offset="85%" stop-color="#dc2626" />
+                <stop offset="100%" stop-color="transparent" />
+              </radialGradient>
+              <path d="M50 4 Q65 18 85 10 Q80 34 95 46 Q76 60 86 84 Q62 76 52 98 Q40 82 16 90 Q26 66 6 50 Q24 40 16 16 Q36 26 50 4 Z" fill="url(#nukeCore2)"/>
+              <circle cx="50" cy="50" r="18" fill="#ffffff" opacity="0.95"/>
             </svg>
           </div>
 
-          <!-- 4. Клубы объемного черного дыма -->
-          <div id="smoke-group" class="absolute top-20 left-1/2 -translate-x-1/2 w-28 h-28 z-32 pointer-events-none opacity-0">
-            <div class="absolute w-14 h-14 rounded-full bg-[#0f172a]/95 blur-md" style="--smk-x: 55px; --smk-y: -55px;"></div>
-            <div class="absolute w-16 h-16 rounded-full bg-[#1e293b]/90 blur-md" style="--smk-x: -60px; --smk-y: -45px;"></div>
-            <div class="absolute w-12 h-12 rounded-full bg-[#334155]/85 blur-sm" style="--smk-x: 35px; --smk-y: 50px;"></div>
-            <div class="absolute w-10 h-10 rounded-full bg-[#020617]/90 blur-sm" style="--smk-x: -45px; --smk-y: 40px;"></div>
+          <!-- 4. Компактные клубы дыма -->
+          <div id="smoke-group" class="absolute top-20 left-1/2 -translate-x-1/2 w-12 h-12 z-32 pointer-events-none opacity-0">
+            <div class="absolute w-8 h-8 rounded-full bg-[#0f172a]/90" style="--smk-x: 25px; --smk-y: -25px;"></div>
+            <div class="absolute w-9 h-9 rounded-full bg-[#1e293b]/85" style="--smk-x: -28px; --smk-y: -20px;"></div>
+            <div class="absolute w-7 h-7 rounded-full bg-[#334155]/80" style="--smk-x: 18px; --smk-y: 22px;"></div>
           </div>
 
-          <!-- 5. Разлетающиеся раскаленные осколки камня и огненные искры -->
-          <div id="pyro-group" class="absolute top-20 left-1/2 -translate-x-1/2 w-24 h-24 z-35 pointer-events-none opacity-0">
-            <div class="absolute w-3.5 h-3.5 bg-[#fef08a] rounded-sm shadow-[0_0_12px_#f59e0b]" style="--spark-x: 85px; --spark-y: -75px; --spark-r: 380deg;"></div>
-            <div class="absolute w-3 h-3 bg-[#f97316] rounded-sm shadow-[0_0_12px_#ef4444]" style="--spark-x: -90px; --spark-y: -60px; --spark-r: -340deg;"></div>
-            <div class="absolute w-2.5 h-2.5 bg-[#ffffff] rounded-full shadow-[0_0_10px_#ffffff]" style="--spark-x: 70px; --spark-y: 75px; --spark-r: 450deg;"></div>
-            <div class="absolute w-2.5 h-2.5 bg-[#ef4444] rounded-sm shadow-[0_0_10px_#f97316]" style="--spark-x: -75px; --spark-y: 65px; --spark-r: -400deg;"></div>
-            <div class="absolute w-3 h-3 bg-[#475569] border border-[#94a3b8] rounded-sm" style="--spark-x: 95px; --spark-y: 15px; --spark-r: 520deg;"></div>
-            <div class="absolute w-2.5 h-2.5 bg-[#1e293b] border border-[#cbd5e1] rounded-sm" style="--spark-x: -95px; --spark-y: 20px; --spark-r: -480deg;"></div>
+          <!-- 5. Легкие искры и осколки -->
+          <div id="pyro-group" class="absolute top-20 left-1/2 -translate-x-1/2 w-12 h-12 z-35 pointer-events-none opacity-0">
+            <div class="absolute w-2 h-2 bg-[#fef08a] rounded-full" style="--spark-x: 35px; --spark-y: -30px;"></div>
+            <div class="absolute w-2 h-2 bg-[#f97316] rounded-full" style="--spark-x: -38px; --spark-y: -25px;"></div>
+            <div class="absolute w-1.5 h-1.5 bg-[#ffffff] rounded-full" style="--spark-x: 28px; --spark-y: 30px;"></div>
+            <div class="absolute w-2 h-2 bg-[#475569] rounded-sm" style="--spark-x: -32px; --spark-y: 28px;"></div>
           </div>
 
           <!-- 6. Сноп искр и паутина трещин лобового стекла -->
-          <div id="spark-effect" class="absolute top-20 left-1/2 -translate-x-1/2 w-32 h-32 bg-gradient-to-r from-[#FEF08A] via-[#F97316] to-[#EF4444] rounded-full blur-md z-33 opacity-0 pointer-events-none mix-blend-screen"></div>
-          <svg id="spider-glass-crack" class="absolute top-8 left-1/2 -translate-x-1/2 w-28 h-28 z-25 opacity-0 pointer-events-none drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="4" fill="#ffffff"/>
-            <path d="M50 50 L20 15 M50 50 L80 18 M50 50 L92 52 M50 50 L75 88 M50 50 L25 85 M50 50 L8 50" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M35 32 Q 50 25, 65 34 M68 36 Q 78 50, 72 68 M70 70 Q 50 78, 36 68 M34 66 Q 22 50, 34 33" stroke="rgba(255,255,255,0.75)" stroke-width="1.2" fill="none"/>
+          <div id="spark-effect" class="absolute top-20 left-1/2 -translate-x-1/2 w-16 h-16 bg-gradient-to-r from-[#FEF08A] via-[#F97316] to-[#EF4444] rounded-full blur-sm z-33 opacity-0 pointer-events-none mix-blend-screen"></div>
+          <svg id="spider-glass-crack" class="absolute top-8 left-1/2 -translate-x-1/2 w-24 h-24 z-25 opacity-0 pointer-events-none" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="3" fill="#ffffff"/>
+            <path d="M50 50 L20 15 M50 50 L80 18 M50 50 L92 52 M50 50 L75 88 M50 50 L25 85 M50 50 L8 50" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M35 32 Q 50 25, 65 34 M68 36 Q 78 50, 72 68 M70 70 Q 50 78, 36 68 M34 66 Q 22 50, 34 33" stroke="rgba(255,255,255,0.75)" stroke-width="1" fill="none"/>
           </svg>
 
           <!-- 9 РЕАЛИСТИЧНЫХ КУЗОВНЫХ ДЕТАЛЕЙ (ПО ЭТАПАМ) -->
@@ -569,7 +556,7 @@
 
           if (appContainer) {
             appContainer.classList.add('shake-hard');
-            setTimeout(() => appContainer.classList.remove('shake-hard'), 480);
+            setTimeout(() => appContainer.classList.remove('shake-hard'), 400);
           }
           if (damageFilter) {
             damageFilter.style.opacity = Math.min(1, totalDamage / 300);
@@ -577,7 +564,7 @@
           if (sceneBg) {
             sceneBg.style.filter = `sepia(${totalDamage/6}%) contrast(${100 + totalDamage/4}%)`;
           }
-        }, 430);
+        }, 380);
       }
 
       const pct = Math.min(Math.round((totalDamage / 675) * 100), 100);
