@@ -185,7 +185,7 @@ h1 em, h2 em, h3 em, .font-serif em {
     transform: translate3d(0px, 0px, 0) scale(1.25) rotate(45deg);
   }
   82% {
-    /* Рикошет от лобового стекла */
+    /* Рикошет от капота */
     opacity: 0.9;
     transform: translate3d(55px, 35px, 0) scale(0.95) rotate(120deg);
   }
@@ -197,6 +197,63 @@ h1 em, h2 em, h3 em, .font-serif em {
 
 .pebble-anim {
   animation: pebbleFlyRealistic 0.62s cubic-bezier(0.16, 0.88, 0.28, 1) forwards;
+}
+
+/* ── Анимированный кинематографичный взрыв (Fireball & Blast) ── */
+@keyframes fireballExplosion {
+  0% {
+    transform: translate(-50%, -50%) scale(0.1) rotate(0deg);
+    opacity: 0;
+    filter: brightness(3.5) drop-shadow(0 0 40px #ffffff);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1) rotate(25deg);
+    filter: brightness(2.8) drop-shadow(0 0 50px #f59e0b);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.7) rotate(60deg);
+    filter: brightness(1.8) drop-shadow(0 0 40px #ef4444);
+  }
+  70% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(2.2) rotate(90deg);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.7) rotate(120deg);
+    opacity: 0;
+    filter: brightness(0.8);
+  }
+}
+
+.fireball-anim {
+  animation: fireballExplosion 0.68s cubic-bezier(0.12, 0.9, 0.25, 1) forwards !important;
+}
+
+/* ── Клубы дыма от взрыва ── */
+@keyframes smokePlume {
+  0% {
+    transform: scale(0.2) translate(0, 0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.85;
+    transform: scale(1.1) translate(var(--smk-x, 15px), var(--smk-y, -20px));
+  }
+  70% {
+    opacity: 0.5;
+    transform: scale(1.9) translate(calc(var(--smk-x, 15px) * 1.8), calc(var(--smk-y, -20px) * 1.8));
+  }
+  100% {
+    transform: scale(2.6) translate(calc(var(--smk-x, 15px) * 2.5), calc(var(--smk-y, -20px) * 2.5));
+    opacity: 0;
+  }
+}
+
+.smoke-anim {
+  animation: smokePlume 0.85s cubic-bezier(0.18, 0.85, 0.35, 1) forwards;
 }
 
 /* ── Разлетающаяся каменная крошка и осколки камня ── */
@@ -218,38 +275,29 @@ h1 em, h2 em, h3 em, .font-serif em {
   animation: shardsBurst 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
 }
 
-/* ── Ударная волна и сноп искр ── */
-@keyframes shockwaveExpand {
-  0% {
-    transform: scale(0.1);
-    opacity: 1;
-    border-width: 4px;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(2.4);
-    opacity: 0;
-    border-width: 1px;
-  }
+/* ── Вспышка на всю сцену при детонации ── */
+@keyframes flashSceneBlast {
+  0%   { opacity: 0; }
+  12%  { opacity: 0.9; }
+  35%  { opacity: 0.6; }
+  100% { opacity: 0; }
 }
 
-.shockwave-anim {
-  animation: shockwaveExpand 0.45s ease-out forwards;
+.blast-flash {
+  animation: flashSceneBlast 0.45s ease-out forwards;
 }
 
 @keyframes sparkFlashVivid {
-  0%   { transform: scale(0.3); opacity: 1; filter: brightness(2); }
-  40%  { transform: scale(1.6); opacity: 0.95; }
-  100% { transform: scale(2.6); opacity: 0; filter: brightness(1); }
+  0%   { transform: scale(0.3); opacity: 1; filter: brightness(2.5); }
+  35%  { transform: scale(1.8); opacity: 0.95; }
+  100% { transform: scale(2.8); opacity: 0; filter: brightness(1); }
 }
 
 .spark-flash {
-  animation: sparkFlashVivid 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  animation: sparkFlashVivid 0.45s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
 }
 
-/* ── Сетка трещин лобового стекла (Spiderweb Fracture) ── */
+/* ── Сетка трещин лобового стекла ── */
 @keyframes spiderCrackAnim {
   0%   { opacity: 0; transform: scale(0.4); }
   20%  { opacity: 1; transform: scale(1); }
@@ -263,63 +311,108 @@ h1 em, h2 em, h3 em, .font-serif em {
 
 @keyframes shakeHard {
   0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  15% { transform: translate(-10px, 8px) rotate(-3.5deg); }
-  30% { transform: translate(10px, -8px) rotate(3.5deg); }
-  50% { transform: translate(-8px, 5px) rotate(-2deg); }
-  70% { transform: translate(7px, -4px) rotate(2deg); }
-  85% { transform: translate(-3px, 2px) rotate(-1deg); }
+  12% { transform: translate(-14px, 10px) rotate(-4deg); }
+  25% { transform: translate(14px, -10px) rotate(4deg); }
+  45% { transform: translate(-10px, 7px) rotate(-2.5deg); }
+  65% { transform: translate(8px, -5px) rotate(2deg); }
+  85% { transform: translate(-4px, 2px) rotate(-1deg); }
 }
 
 .shake-hard {
-  animation: shakeHard 0.42s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shakeHard 0.46s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-/* ── РЕАЛИСТИЧНЫЙ ДИНАМИЧЕСКИЙ РАЗЛЕТ АВТОДЕТАЛЕЙ С ГРАВИТАЦИЕЙ И ВРАЩЕНИЕМ ── */
-@keyframes flyOffWheelRealistic {
-  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
-  12%  { opacity: 1; transform: translate3d(50px, -45px, 0) rotate(110deg) scale(1.4); }
-  45%  { transform: translate3d(170px, -80px, 0) rotate(420deg) scale(1.2); }
-  75%  { opacity: 1; transform: translate3d(290px, 15px, 0) rotate(780deg) scale(0.9); }
-  100% { transform: translate3d(430px, 160px, 0) rotate(1140deg) scale(0.45); opacity: 0; }
-}
-
-@keyframes flyOffMirrorRealistic {
-  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
-  12%  { opacity: 1; transform: translate3d(-45px, -35px, 0) rotate(-80deg) scale(1.4); }
-  45%  { transform: translate3d(-150px, -65px, 0) rotate(-260deg) scale(1.15); }
-  75%  { opacity: 1; transform: translate3d(-270px, 25px, 0) rotate(-520deg) scale(0.8); }
-  100% { transform: translate3d(-390px, 150px, 0) rotate(-780deg) scale(0.4); opacity: 0; }
-}
-
-@keyframes flyOffHeadlightRealistic {
-  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
-  12%  { opacity: 1; transform: translate3d(45px, -30px, 0) rotate(50deg) scale(1.45); }
-  45%  { transform: translate3d(175px, -45px, 0) rotate(270deg) scale(1.15); }
-  75%  { opacity: 1; transform: translate3d(295px, 50px, 0) rotate(520deg) scale(0.8); }
-  100% { transform: translate3d(410px, 175px, 0) rotate(760deg) scale(0.4); opacity: 0; }
-}
-
+/* ── РЕАЛИСТИЧНЫЙ ДИНАМИЧЕСКИЙ РАЗЛЕТ КУЗОВНЫХ ДЕТАЛЕЙ ПРИ ВЗРЫВЕ ── */
+/* 1. Передний бампер / Сплиттер */
 @keyframes flyOffBumperRealistic {
   0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
-  12%  { opacity: 1; transform: translate3d(-45px, 20px, 0) rotate(-40deg) scale(1.35); }
-  45%  { transform: translate3d(-170px, 55px, 0) rotate(-190deg) scale(1.1); }
-  75%  { opacity: 1; transform: translate3d(-290px, 115px, 0) rotate(-370deg) scale(0.75); }
-  100% { transform: translate3d(-400px, 195px, 0) rotate(-580deg) scale(0.35); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(-55px, -35px, 0) rotate(-45deg) scale(1.4); }
+  45%  { transform: translate3d(-190px, -15px, 0) rotate(-210deg) scale(1.15); }
+  75%  { opacity: 1; transform: translate3d(-310px, 75px, 0) rotate(-400deg) scale(0.8); }
+  100% { transform: translate3d(-420px, 185px, 0) rotate(-620deg) scale(0.35); opacity: 0; }
 }
 
+/* 2. Фара */
+@keyframes flyOffHeadlightRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(45px, -40px, 0) rotate(55deg) scale(1.5); }
+  45%  { transform: translate3d(180px, -60px, 0) rotate(290deg) scale(1.2); }
+  75%  { opacity: 1; transform: translate3d(300px, 35px, 0) rotate(560deg) scale(0.85); }
+  100% { transform: translate3d(420px, 160px, 0) rotate(800deg) scale(0.4); opacity: 0; }
+}
+
+/* 3. Капот (Огромная кузовная деталь) */
+@keyframes flyOffHoodRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.5); opacity: 0; }
+  15%  { opacity: 1; transform: translate3d(20px, -90px, 0) rotate(-35deg) scale(1.6); }
+  45%  { transform: translate3d(70px, -150px, 0) rotate(-110deg) scale(1.35); }
+  75%  { opacity: 1; transform: translate3d(160px, -30px, 0) rotate(-240deg) scale(0.95); }
+  100% { transform: translate3d(260px, 140px, 0) rotate(-380deg) scale(0.4); opacity: 0; }
+}
+
+/* 4. Лобовое стекло */
 @keyframes flyOffGlassRealistic {
   0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
-  12%  { opacity: 1; transform: translate3d(25px, -55px, 0) rotate(70deg) scale(1.5); }
-  45%  { transform: translate3d(130px, -95px, 0) rotate(260deg) scale(1.15); }
-  75%  { opacity: 1; transform: translate3d(250px, -15px, 0) rotate(510deg) scale(0.75); }
-  100% { transform: translate3d(370px, 115px, 0) rotate(780deg) scale(0.3); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(25px, -65px, 0) rotate(70deg) scale(1.55); }
+  45%  { transform: translate3d(140px, -110px, 0) rotate(280deg) scale(1.2); }
+  75%  { opacity: 1; transform: translate3d(260px, -20px, 0) rotate(540deg) scale(0.8); }
+  100% { transform: translate3d(380px, 120px, 0) rotate(800deg) scale(0.3); opacity: 0; }
 }
 
+/* 5. Дверь */
+@keyframes flyOffDoorRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.5); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(-60px, -50px, 0) rotate(-60deg) scale(1.55); }
+  45%  { transform: translate3d(-190px, -70px, 0) rotate(-220deg) scale(1.25); }
+  75%  { opacity: 1; transform: translate3d(-310px, 20px, 0) rotate(-440deg) scale(0.85); }
+  100% { transform: translate3d(-430px, 150px, 0) rotate(-680deg) scale(0.4); opacity: 0; }
+}
+
+/* 6. Колесо / Диск */
+@keyframes flyOffWheelRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(50px, -50px, 0) rotate(120deg) scale(1.45); }
+  45%  { transform: translate3d(180px, -90px, 0) rotate(450deg) scale(1.25); }
+  75%  { opacity: 1; transform: translate3d(300px, 10px, 0) rotate(820deg) scale(0.9); }
+  100% { transform: translate3d(440px, 160px, 0) rotate(1200deg) scale(0.45); opacity: 0; }
+}
+
+/* 7. Боковое зеркало */
+@keyframes flyOffMirrorRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(-50px, -40px, 0) rotate(-90deg) scale(1.45); }
+  45%  { transform: translate3d(-160px, -75px, 0) rotate(-280deg) scale(1.2); }
+  75%  { opacity: 1; transform: translate3d(-280px, 20px, 0) rotate(-550deg) scale(0.8); }
+  100% { transform: translate3d(-400px, 150px, 0) rotate(-820deg) scale(0.4); opacity: 0; }
+}
+
+/* 8. Спойлер / Крыша */
+@keyframes flyOffRoofRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.5); opacity: 0; }
+  15%  { opacity: 1; transform: translate3d(0px, -110px, 0) rotate(40deg) scale(1.6); }
+  45%  { transform: translate3d(40px, -160px, 0) rotate(140deg) scale(1.3); }
+  75%  { opacity: 1; transform: translate3d(110px, -50px, 0) rotate(270deg) scale(0.9); }
+  100% { transform: translate3d(210px, 120px, 0) rotate(420deg) scale(0.35); opacity: 0; }
+}
+
+/* 9. Задний бампер / Диффузор */
+@keyframes flyOffRearBumperRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(60px, -35px, 0) rotate(45deg) scale(1.45); }
+  45%  { transform: translate3d(190px, -10px, 0) rotate(200deg) scale(1.2); }
+  75%  { opacity: 1; transform: translate3d(310px, 80px, 0) rotate(390deg) scale(0.8); }
+  100% { transform: translate3d(430px, 190px, 0) rotate(600deg) scale(0.35); opacity: 0; }
+}
+
+.fly-bumper { animation: flyOffBumperRealistic 2.6s cubic-bezier(0.15, 0.85, 0.32, 1) forwards !important; }
+.fly-headlight { animation: flyOffHeadlightRealistic 2.5s cubic-bezier(0.12, 0.8, 0.28, 1) forwards !important; }
+.fly-hood { animation: flyOffHoodRealistic 2.8s cubic-bezier(0.12, 0.9, 0.28, 1) forwards !important; }
+.fly-glass { animation: flyOffGlassRealistic 2.3s cubic-bezier(0.15, 0.84, 0.3, 1) forwards !important; }
+.fly-door { animation: flyOffDoorRealistic 2.7s cubic-bezier(0.14, 0.88, 0.3, 1) forwards !important; }
 .fly-wheel { animation: flyOffWheelRealistic 2.6s cubic-bezier(0.14, 0.82, 0.3, 1) forwards !important; }
 .fly-mirror { animation: flyOffMirrorRealistic 2.5s cubic-bezier(0.16, 0.86, 0.32, 1) forwards !important; }
-.fly-headlight { animation: flyOffHeadlightRealistic 2.5s cubic-bezier(0.12, 0.8, 0.28, 1) forwards !important; }
-.fly-bumper { animation: flyOffBumperRealistic 2.6s cubic-bezier(0.18, 0.88, 0.35, 1) forwards !important; }
-.fly-glass { animation: flyOffGlassRealistic 2.3s cubic-bezier(0.15, 0.84, 0.3, 1) forwards !important; }
+.fly-roof { animation: flyOffRoofRealistic 2.8s cubic-bezier(0.12, 0.9, 0.25, 1) forwards !important; }
+.fly-rear-bumper { animation: flyOffRearBumperRealistic 2.6s cubic-bezier(0.15, 0.85, 0.32, 1) forwards !important; }
 
 /* ── Модальная шторка (Bottom Sheet Drawer) ── */
 #drawer-panel {
