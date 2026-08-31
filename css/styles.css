@@ -163,99 +163,163 @@ h1 em, h2 em, h3 em, .font-serif em {
   animation: speedStreaks 0.6s linear infinite;
 }
 
-/* ── Прилет Камешка Слева Сверху (Крупный SVG) ── */
-@keyframes pebbleFlyTopLeft {
+/* ── Реалистичная физика прилета и удара камня ── */
+@keyframes pebbleFlyRealistic {
   0% {
-    transform: translate(-260px, -180px) rotate(-60deg) scale(1.4);
+    transform: translate3d(-340px, -200px, 0) scale(0.25) rotate(-240deg);
     opacity: 0;
+    filter: blur(2px);
   }
-  20% { opacity: 1; }
-  75% {
-    transform: translate(0px, 0px) rotate(320deg) scale(1);
+  15% {
     opacity: 1;
+    transform: translate3d(-220px, -120px, 0) scale(0.65) rotate(-140deg);
+    filter: blur(0px);
+  }
+  65% {
+    opacity: 1;
+    transform: translate3d(-30px, -15px, 0) scale(1.15) rotate(20deg);
+  }
+  75% {
+    /* Момент сокрушительного удара */
+    opacity: 1;
+    transform: translate3d(0px, 0px, 0) scale(1.25) rotate(45deg);
+  }
+  82% {
+    /* Рикошет от лобового стекла */
+    opacity: 0.9;
+    transform: translate3d(55px, 35px, 0) scale(0.95) rotate(120deg);
   }
   100% {
-    transform: translate(140px, 90px) rotate(540deg) scale(0.3);
+    transform: translate3d(190px, 130px, 0) scale(0.35) rotate(380deg);
     opacity: 0;
   }
 }
 
 .pebble-anim {
-  animation: pebbleFlyTopLeft 0.65s cubic-bezier(0.15, 0.85, 0.3, 1) forwards;
+  animation: pebbleFlyRealistic 0.62s cubic-bezier(0.16, 0.88, 0.28, 1) forwards;
 }
 
-@keyframes sparkExplode {
-  0%   { transform: scale(0.2); opacity: 1; }
-  50%  { transform: scale(1.8); opacity: 0.9; }
-  100% { transform: scale(2.6); opacity: 0; }
+/* ── Разлетающаяся каменная крошка и осколки камня ── */
+@keyframes shardsBurst {
+  0% {
+    transform: scale(0.2) translate(0, 0);
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.3) translate(var(--shard-x, 60px), var(--shard-y, -50px)) rotate(var(--shard-r, 360deg));
+    opacity: 0;
+  }
+}
+
+.shards-anim {
+  animation: shardsBurst 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+}
+
+/* ── Ударная волна и сноп искр ── */
+@keyframes shockwaveExpand {
+  0% {
+    transform: scale(0.1);
+    opacity: 1;
+    border-width: 4px;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+.shockwave-anim {
+  animation: shockwaveExpand 0.45s ease-out forwards;
+}
+
+@keyframes sparkFlashVivid {
+  0%   { transform: scale(0.3); opacity: 1; filter: brightness(2); }
+  40%  { transform: scale(1.6); opacity: 0.95; }
+  100% { transform: scale(2.6); opacity: 0; filter: brightness(1); }
 }
 
 .spark-flash {
-  animation: sparkExplode 0.4s ease-out forwards;
+  animation: sparkFlashVivid 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
 }
 
-@keyframes glassShatter {
-  0%   { transform: translate(0, 0) scale(1); opacity: 1; }
-  100% { transform: translate(140px, 70px) rotate(400deg) scale(0.2); opacity: 0; }
+/* ── Сетка трещин лобового стекла (Spiderweb Fracture) ── */
+@keyframes spiderCrackAnim {
+  0%   { opacity: 0; transform: scale(0.4); }
+  20%  { opacity: 1; transform: scale(1); }
+  75%  { opacity: 0.85; }
+  100% { opacity: 0; }
 }
 
-.shatter-anim {
-  animation: glassShatter 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+.spider-anim {
+  animation: spiderCrackAnim 0.75s ease-out forwards;
 }
 
 @keyframes shakeHard {
   0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(-8px, 6px) rotate(-3deg); }
-  40% { transform: translate(8px, -6px) rotate(3deg); }
-  60% { transform: translate(-6px, 4px) rotate(-2deg); }
-  80% { transform: translate(6px, -4px) rotate(2deg); }
+  15% { transform: translate(-10px, 8px) rotate(-3.5deg); }
+  30% { transform: translate(10px, -8px) rotate(3.5deg); }
+  50% { transform: translate(-8px, 5px) rotate(-2deg); }
+  70% { transform: translate(7px, -4px) rotate(2deg); }
+  85% { transform: translate(-3px, 2px) rotate(-1deg); }
 }
 
 .shake-hard {
-  animation: shakeHard 0.4s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shakeHard 0.42s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-/* ── ПООЧЕРЕДНЫЙ ЗАМЕДЛЕННЫЙ РАЗЛЕТ ДЕТАЛЕЙ (SLOW MOTION SINGLE-PART FLY-OFF) ────── */
-@keyframes flyOffWheelSlow {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 0; }
-  10%  { opacity: 1; transform: translate(45px, -25px) rotate(60deg) scale(1.5); }
-  75%  { opacity: 1; }
-  100% { transform: translate(360px, -130px) rotate(1080deg) scale(0.5); opacity: 0; }
+/* ── РЕАЛИСТИЧНЫЙ ДИНАМИЧЕСКИЙ РАЗЛЕТ АВТОДЕТАЛЕЙ С ГРАВИТАЦИЕЙ И ВРАЩЕНИЕМ ── */
+@keyframes flyOffWheelRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(50px, -45px, 0) rotate(110deg) scale(1.4); }
+  45%  { transform: translate3d(170px, -80px, 0) rotate(420deg) scale(1.2); }
+  75%  { opacity: 1; transform: translate3d(290px, 15px, 0) rotate(780deg) scale(0.9); }
+  100% { transform: translate3d(430px, 160px, 0) rotate(1140deg) scale(0.45); opacity: 0; }
 }
 
-@keyframes flyOffDoorSlow {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 0; }
-  10%  { opacity: 1; transform: translate(55px, 35px) rotate(-80deg) scale(1.6); }
-  75%  { opacity: 1; }
-  100% { transform: translate(380px, 180px) rotate(-900deg) scale(0.5); opacity: 0; }
+@keyframes flyOffMirrorRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(-45px, -35px, 0) rotate(-80deg) scale(1.4); }
+  45%  { transform: translate3d(-150px, -65px, 0) rotate(-260deg) scale(1.15); }
+  75%  { opacity: 1; transform: translate3d(-270px, 25px, 0) rotate(-520deg) scale(0.8); }
+  100% { transform: translate3d(-390px, 150px, 0) rotate(-780deg) scale(0.4); opacity: 0; }
 }
 
-@keyframes flyOffHeadlightSlow {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 0; }
-  10%  { opacity: 1; transform: translate(35px, -15px) rotate(50deg) scale(1.7); }
-  75%  { opacity: 1; }
-  100% { transform: translate(350px, 20px) rotate(720deg) scale(0.5); opacity: 0; }
+@keyframes flyOffHeadlightRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(45px, -30px, 0) rotate(50deg) scale(1.45); }
+  45%  { transform: translate3d(175px, -45px, 0) rotate(270deg) scale(1.15); }
+  75%  { opacity: 1; transform: translate3d(295px, 50px, 0) rotate(520deg) scale(0.8); }
+  100% { transform: translate3d(410px, 175px, 0) rotate(760deg) scale(0.4); opacity: 0; }
 }
 
-@keyframes flyOffBumperSlow {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 0; }
-  10%  { opacity: 1; transform: translate(-40px, 30px) rotate(-60deg) scale(1.6); }
-  75%  { opacity: 1; }
-  100% { transform: translate(-300px, 170px) rotate(-720deg) scale(0.4); opacity: 0; }
+@keyframes flyOffBumperRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(-45px, 20px, 0) rotate(-40deg) scale(1.35); }
+  45%  { transform: translate3d(-170px, 55px, 0) rotate(-190deg) scale(1.1); }
+  75%  { opacity: 1; transform: translate3d(-290px, 115px, 0) rotate(-370deg) scale(0.75); }
+  100% { transform: translate3d(-400px, 195px, 0) rotate(-580deg) scale(0.35); opacity: 0; }
 }
 
-@keyframes flyOffGlassSlow {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 0; }
-  10%  { opacity: 1; transform: translate(-35px, -35px) rotate(100deg) scale(1.8); }
-  75%  { opacity: 1; }
-  100% { transform: translate(-260px, -150px) rotate(720deg) scale(0.4); opacity: 0; }
+@keyframes flyOffGlassRealistic {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  12%  { opacity: 1; transform: translate3d(25px, -55px, 0) rotate(70deg) scale(1.5); }
+  45%  { transform: translate3d(130px, -95px, 0) rotate(260deg) scale(1.15); }
+  75%  { opacity: 1; transform: translate3d(250px, -15px, 0) rotate(510deg) scale(0.75); }
+  100% { transform: translate3d(370px, 115px, 0) rotate(780deg) scale(0.3); opacity: 0; }
 }
 
-.fly-wheel { animation: flyOffWheelSlow 2.8s cubic-bezier(0.12, 0.8, 0.32, 1) forwards !important; }
-.fly-door { animation: flyOffDoorSlow 2.8s cubic-bezier(0.15, 0.85, 0.35, 1) forwards !important; }
-.fly-headlight { animation: flyOffHeadlightSlow 2.6s cubic-bezier(0.1, 0.75, 0.25, 1) forwards !important; }
-.fly-bumper { animation: flyOffBumperSlow 2.8s cubic-bezier(0.2, 0.9, 0.4, 1) forwards !important; }
-.fly-glass { animation: flyOffGlassSlow 2.5s cubic-bezier(0.18, 0.82, 0.3, 1) forwards !important; }
+.fly-wheel { animation: flyOffWheelRealistic 2.6s cubic-bezier(0.14, 0.82, 0.3, 1) forwards !important; }
+.fly-mirror { animation: flyOffMirrorRealistic 2.5s cubic-bezier(0.16, 0.86, 0.32, 1) forwards !important; }
+.fly-headlight { animation: flyOffHeadlightRealistic 2.5s cubic-bezier(0.12, 0.8, 0.28, 1) forwards !important; }
+.fly-bumper { animation: flyOffBumperRealistic 2.6s cubic-bezier(0.18, 0.88, 0.35, 1) forwards !important; }
+.fly-glass { animation: flyOffGlassRealistic 2.3s cubic-bezier(0.15, 0.84, 0.3, 1) forwards !important; }
 
 /* ── Модальная шторка (Bottom Sheet Drawer) ── */
 #drawer-panel {
