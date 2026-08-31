@@ -87,35 +87,104 @@ export function renderCrashTestQuiz(state = {}) {
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none"></div>
         <div id="damage-filter-overlay" class="absolute inset-0 opacity-0 bg-red-900/40 mix-blend-color-burn transition-opacity duration-300 pointer-events-none"></div>
 
-        <!-- 1. Натуральный 3D Гранитный Камень -->
-        <img id="strike-pebble" src="./img/rock.svg" alt="Камень" class="absolute top-10 left-1/2 -translate-x-1/2 w-20 h-20 z-30 opacity-0 pointer-events-none drop-shadow-[0_15px_25px_rgba(0,0,0,0.95)]" />
+        <!-- Вспышка на всю сцену при детонации -->
+        <div id="blast-scene-flash" class="absolute inset-0 bg-yellow-300/40 mix-blend-screen opacity-0 pointer-events-none z-30"></div>
 
-        <!-- 2. Разлетающиеся каменные осколки и крошка -->
-        <div id="rock-shards-group" class="absolute top-16 left-1/2 -translate-x-1/2 w-16 h-16 z-30 pointer-events-none opacity-0">
-          <div class="absolute w-3 h-3 bg-[#475569] border border-[#94a3b8] rounded-sm shards-anim" style="--shard-x: 55px; --shard-y: -45px; --shard-r: 320deg;"></div>
-          <div class="absolute w-2.5 h-2.5 bg-[#334155] border border-[#cbd5e1] rounded-sm shards-anim" style="--shard-x: -60px; --shard-y: -35px; --shard-r: -280deg;"></div>
-          <div class="absolute w-2 h-2 bg-[#1e293b] border border-[#94a3b8] rounded-sm shards-anim" style="--shard-x: 40px; --shard-y: 50px; --shard-r: 400deg;"></div>
-          <div class="absolute w-2 h-2 bg-[#64748b] rounded-sm shards-anim" style="--shard-x: -45px; --shard-y: 40px; --shard-r: -360deg;"></div>
+        <!-- 1. Натуральный 3D Гранитный Булыжник -->
+        <img id="strike-pebble" src="./img/rock.svg" alt="Булыжник" class="absolute top-10 left-1/2 -translate-x-1/2 w-20 h-20 z-30 opacity-0 pointer-events-none drop-shadow-[0_15px_25px_rgba(0,0,0,0.95)]" />
+
+        <!-- 2. Анимированный Огненный Шар Взрыва (Fireball & Blast Wave) -->
+        <div id="explosion-fireball" class="absolute top-16 left-1/2 w-28 h-28 z-35 pointer-events-none opacity-0 flex items-center justify-center">
+          <svg viewBox="0 0 100 100" class="w-full h-full">
+            <radialGradient id="fireGrad1" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="20%" stop-color="#fef08a" />
+              <stop offset="45%" stop-color="#f59e0b" />
+              <stop offset="75%" stop-color="#ef4444" />
+              <stop offset="95%" stop-color="#7f1d1d" />
+              <stop offset="100%" stop-color="transparent" />
+            </radialGradient>
+            <path d="M50 5 Q65 25 85 15 Q80 40 95 50 Q75 65 85 90 Q60 80 50 95 Q40 80 15 90 Q25 65 5 50 Q20 40 15 15 Q35 25 50 5 Z" fill="url(#fireGrad1)"/>
+            <circle cx="50" cy="50" r="22" fill="#ffffff" opacity="0.9"/>
+          </svg>
         </div>
 
-        <!-- 3. Кольцевая ударная волна и сноп искр -->
-        <div id="impact-shockwave" class="absolute top-16 left-1/2 -translate-x-1/2 w-20 h-20 rounded-full border-2 border-[#F4EBBE] z-30 opacity-0 pointer-events-none mix-blend-screen shadow-[0_0_20px_#F4EBBE]"></div>
-        <div id="spark-effect" class="absolute top-16 left-1/2 -translate-x-1/2 w-24 h-24 bg-gradient-to-r from-[#FEF08A] via-[#F97316] to-[#EF4444] rounded-full blur-md z-30 opacity-0 pointer-events-none mix-blend-screen"></div>
+        <!-- 3. Клубы дыма от взрыва -->
+        <div id="smoke-group" class="absolute top-16 left-1/2 -translate-x-1/2 w-20 h-20 z-32 pointer-events-none opacity-0">
+          <div class="absolute w-8 h-8 rounded-full bg-[#1e293b]/80 blur-sm" style="--smk-x: 35px; --smk-y: -40px;"></div>
+          <div class="absolute w-10 h-10 rounded-full bg-[#0f172a]/90 blur-sm" style="--smk-x: -40px; --smk-y: -30px;"></div>
+          <div class="absolute w-7 h-7 rounded-full bg-[#334155]/70 blur-sm" style="--smk-x: 25px; --smk-y: 35px;"></div>
+        </div>
 
-        <!-- 4. Паутина трещин лобового стекла -->
+        <!-- 4. Разлетающиеся каменные осколки и крошка -->
+        <div id="rock-shards-group" class="absolute top-16 left-1/2 -translate-x-1/2 w-16 h-16 z-30 pointer-events-none opacity-0">
+          <div class="absolute w-3 h-3 bg-[#475569] border border-[#94a3b8] rounded-sm" style="--shard-x: 65px; --shard-y: -55px; --shard-r: 320deg;"></div>
+          <div class="absolute w-2.5 h-2.5 bg-[#334155] border border-[#cbd5e1] rounded-sm" style="--shard-x: -70px; --shard-y: -45px; --shard-r: -280deg;"></div>
+          <div class="absolute w-2 h-2 bg-[#1e293b] border border-[#94a3b8] rounded-sm" style="--shard-x: 50px; --shard-y: 60px; --shard-r: 400deg;"></div>
+          <div class="absolute w-2 h-2 bg-[#64748b] rounded-sm" style="--shard-x: -55px; --shard-y: 50px; --shard-r: -360deg;"></div>
+        </div>
+
+        <!-- 5. Сноп искр и паутина трещин -->
+        <div id="spark-effect" class="absolute top-16 left-1/2 -translate-x-1/2 w-28 h-28 bg-gradient-to-r from-[#FEF08A] via-[#F97316] to-[#EF4444] rounded-full blur-md z-30 opacity-0 pointer-events-none mix-blend-screen"></div>
         <svg id="spider-glass-crack" class="absolute top-8 left-1/2 -translate-x-1/2 w-28 h-28 z-25 opacity-0 pointer-events-none drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="4" fill="#ffffff"/>
           <path d="M50 50 L20 15 M50 50 L80 18 M50 50 L92 52 M50 50 L75 88 M50 50 L25 85 M50 50 L8 50" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
           <path d="M35 32 Q 50 25, 65 34 M68 36 Q 78 50, 72 68 M70 70 Q 50 78, 36 68 M34 66 Q 22 50, 34 33" stroke="rgba(255,255,255,0.75)" stroke-width="1.2" fill="none"/>
         </svg>
 
-        <!-- РЕАЛИСТИЧНЫЕ ДЕТАЛИ АВТОМОБИЛЯ -->
-        <!-- 1. Кованый титановый диск с тормозным ротором и красным суппортом Brembo -->
-        <svg id="car-part-wheel" class="absolute top-10 left-1/2 w-20 h-20 z-40 opacity-0 pointer-events-none drop-shadow-[0_10px_25px_rgba(0,0,0,0.9)]" viewBox="0 0 120 120">
+        <!-- 9 РЕАЛИСТИЧНЫХ КУЗОВНЫХ ДЕТАЛЕЙ (ПО ЭТАПАМ) -->
+        <!-- 1. Передний спортивный бампер / сплиттер -->
+        <svg id="part-bumper-front" class="absolute top-14 left-1/2 w-28 h-14 z-40 opacity-0 pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)]" viewBox="0 0 140 60">
+          <path d="M 5,38 Q 70,8 135,38 L 125,52 Q 70,25 15,52 Z" fill="#1e293b" stroke="#64748b" stroke-width="2.5"/>
+          <line x1="45" y1="22" x2="48" y2="40" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="95" y1="22" x2="92" y2="40" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 5,38 L 2,20 L 12,28 Z" fill="#ef4444"/>
+          <path d="M 135,38 L 138,20 L 128,28 Z" fill="#ef4444"/>
+        </svg>
+
+        <!-- 2. Матричная лазерная фара -->
+        <svg id="part-headlight" class="absolute top-14 left-1/2 w-24 h-16 z-40 opacity-0 pointer-events-none drop-shadow-[0_0_25px_rgba(56,189,248,0.9)]" viewBox="0 0 130 80">
+          <path d="M 15,20 Q 80,10 118,35 Q 110,65 50,68 Q 18,65 15,20 Z" fill="#0284c7" stroke="#38bdf8" stroke-width="2.5"/>
+          <circle cx="48" cy="40" r="16" fill="#0369a1" stroke="#e0f2fe" stroke-width="2.5"/>
+          <circle cx="48" cy="40" r="9" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
+          <circle cx="85" cy="42" r="12" fill="#0284c7" stroke="#e0f2fe" stroke-width="2"/>
+          <path d="M 22,25 Q 75,18 110,38" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M 15,45 Q 5,48 2,58 M 15,55 Q 8,62 5,72" fill="none" stroke="#ef4444" stroke-width="2"/>
+        </svg>
+
+        <!-- 3. Огромный глянцевый капот суперкара (Hood) -->
+        <svg id="part-hood" class="absolute top-10 left-1/2 w-32 h-24 z-40 opacity-0 pointer-events-none drop-shadow-[0_15px_30px_rgba(239,68,68,0.8)]" viewBox="0 0 160 120">
+          <defs>
+            <linearGradient id="hoodGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ef4444"/>
+              <stop offset="50%" stop-color="#dc2626"/>
+              <stop offset="100%" stop-color="#7f1d1d"/>
+            </linearGradient>
+          </defs>
+          <path d="M 30,10 L 130,10 L 155,95 L 5,95 Z" fill="url(#hoodGrad1)" stroke="#ffffff" stroke-width="2.5"/>
+          <polygon points="50,30 75,30 70,60 45,60" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
+          <polygon points="110,30 85,30 90,60 115,60" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
+          <line x1="80" y1="12" x2="80" y2="90" stroke="#fca5a5" stroke-width="2"/>
+        </svg>
+
+        <!-- 4. Лобовое стекло в триплексе -->
+        <svg id="part-windshield" class="absolute top-10 left-1/2 w-28 h-20 z-40 opacity-0 pointer-events-none drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]" viewBox="0 0 140 100">
+          <polygon points="30,10 110,10 135,85 5,85" fill="rgba(186,230,253,0.75)" stroke="#ffffff" stroke-width="2.5"/>
+          <path d="M 70,45 L 35,25 M 70,45 L 115,30 M 70,45 L 105,75 M 70,45 L 30,75" stroke="#ffffff" stroke-width="2"/>
+        </svg>
+
+        <!-- 5. Боковая кузовная дверь -->
+        <svg id="part-door-front" class="absolute top-12 left-1/2 w-28 h-20 z-40 opacity-0 pointer-events-none drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]" viewBox="0 0 140 100">
+          <path d="M 10,25 Q 35,5 125,12 L 115,85 Q 45,90 10,75 Z" fill="#dc2626" stroke="#ffffff" stroke-width="2.5"/>
+          <rect x="35" y="18" width="50" height="24" rx="3" fill="#38bdf8" opacity="0.8" stroke="#ffffff" stroke-width="2"/>
+          <rect x="90" y="55" width="22" height="7" rx="3" fill="#e2e8f0"/>
+        </svg>
+
+        <!-- 6. Кованый титановый диск с Brembo -->
+        <svg id="part-wheel-rim" class="absolute top-10 left-1/2 w-20 h-20 z-40 opacity-0 pointer-events-none drop-shadow-[0_10px_25px_rgba(0,0,0,0.9)]" viewBox="0 0 120 120">
           <circle cx="60" cy="60" r="56" fill="#090d16" stroke="#1e293b" stroke-width="5"/>
           <circle cx="60" cy="60" r="48" fill="#1e293b" stroke="#334155" stroke-width="2"/>
           <circle cx="60" cy="60" r="38" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
-          <circle cx="60" cy="60" r="28" fill="#334155" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
           <path d="M 78,35 Q 98,60 78,85 L 68,80 Q 84,60 68,40 Z" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>
           <text x="80" y="62" fill="#ffffff" font-size="6" font-weight="bold" transform="rotate(90 80 62)">BREMBO</text>
           <g stroke="#f8fafc" stroke-width="3.5" stroke-linecap="round">
@@ -123,73 +192,28 @@ export function renderCrashTestQuiz(state = {}) {
             <line x1="60" y1="74" x2="60" y2="102"/>
             <line x1="18" y1="60" x2="46" y2="60"/>
             <line x1="74" y1="60" x2="102" y2="60"/>
-            <line x1="30" y1="30" x2="50" y2="50"/>
-            <line x1="70" y1="70" x2="90" y2="90"/>
-            <line x1="30" y1="90" x2="50" y2="70"/>
-            <line x1="70" y1="50" x2="90" y2="30"/>
           </g>
           <circle cx="60" cy="60" r="14" fill="#0f172a" stroke="#e2e8f0" stroke-width="2"/>
-          <circle cx="60" cy="60" r="7" fill="#CACC90"/>
         </svg>
 
-        <!-- 2. Карбоновое боковое зеркало с LED повторителем -->
-        <svg id="car-part-mirror" class="absolute top-12 left-1/2 w-22 h-16 z-40 opacity-0 pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.85)]" viewBox="0 0 120 90">
-          <defs>
-            <linearGradient id="mirrorCarbon" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#334155"/>
-              <stop offset="50%" stop-color="#0f172a"/>
-              <stop offset="100%" stop-color="#020617"/>
-            </linearGradient>
-          </defs>
-          <path d="M 20,45 Q 35,15 95,20 Q 115,40 100,70 Q 50,75 20,55 Z" fill="url(#mirrorCarbon)" stroke="#64748b" stroke-width="2"/>
-          <path d="M 28,45 Q 40,24 88,28 Q 100,42 90,62 Q 52,65 28,50 Z" fill="#94a3b8" opacity="0.6" stroke="#ffffff" stroke-width="1.5"/>
+        <!-- 7. Карбоновое боковое зеркало -->
+        <svg id="part-mirror-side" class="absolute top-12 left-1/2 w-22 h-16 z-40 opacity-0 pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.85)]" viewBox="0 0 120 90">
+          <path d="M 20,45 Q 35,15 95,20 Q 115,40 100,70 Q 50,75 20,55 Z" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
           <path d="M 35,52 Q 70,58 108,42" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-          <path d="M 12,50 L 22,48 L 22,58 Z" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
         </svg>
 
-        <!-- 3. Матричная лазерная фара (Matrix LED Headlight) -->
-        <svg id="car-part-headlight" class="absolute top-14 left-1/2 w-24 h-16 z-40 opacity-0 pointer-events-none drop-shadow-[0_0_25px_rgba(56,189,248,0.9)]" viewBox="0 0 130 80">
-          <defs>
-            <linearGradient id="headlightGlass" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#0284c7" stop-opacity="0.9"/>
-              <stop offset="50%" stop-color="#0f172a" stop-opacity="0.95"/>
-              <stop offset="100%" stop-color="#0369a1" stop-opacity="0.9"/>
-            </linearGradient>
-          </defs>
-          <path d="M 15,20 Q 80,10 118,35 Q 110,65 50,68 Q 18,65 15,20 Z" fill="url(#headlightGlass)" stroke="#38bdf8" stroke-width="2.5"/>
-          <circle cx="48" cy="40" r="16" fill="#0369a1" stroke="#e0f2fe" stroke-width="2.5"/>
-          <circle cx="48" cy="40" r="9" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
-          <circle cx="85" cy="42" r="12" fill="#0284c7" stroke="#e0f2fe" stroke-width="2"/>
-          <circle cx="85" cy="42" r="6" fill="#ffffff"/>
-          <path d="M 22,25 Q 75,18 110,38" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M 15,45 Q 5,48 2,58 M 15,55 Q 8,62 5,72" fill="none" stroke="#ef4444" stroke-width="2"/>
-          <circle cx="2" cy="58" r="2.5" fill="#fef08a"/>
-          <circle cx="5" cy="72" r="2.5" fill="#38bdf8"/>
+        <!-- 8. Карбоновое антикрыло / Секция крыши -->
+        <svg id="part-roof-top" class="absolute top-12 left-1/2 w-32 h-14 z-40 opacity-0 pointer-events-none drop-shadow-[0_10px_25px_rgba(0,0,0,0.9)]" viewBox="0 0 160 60">
+          <path d="M 10,25 Q 80,5 150,25 L 145,40 Q 80,20 15,40 Z" fill="#0f172a" stroke="#cbd5e1" stroke-width="2"/>
+          <line x1="45" y1="32" x2="40" y2="55" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+          <line x1="115" y1="32" x2="120" y2="55" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
         </svg>
 
-        <!-- 4. Карбоновый передний сплиттер / Бампер -->
-        <svg id="car-part-bumper" class="absolute top-14 left-1/2 w-28 h-14 z-40 opacity-0 pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)]" viewBox="0 0 140 60">
-          <defs>
-            <linearGradient id="carbonPattern" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#1e293b"/>
-              <stop offset="50%" stop-color="#090d16"/>
-              <stop offset="100%" stop-color="#334155"/>
-            </linearGradient>
-          </defs>
-          <path d="M 5,38 Q 70,8 135,38 L 125,52 Q 70,25 15,52 Z" fill="url(#carbonPattern)" stroke="#64748b" stroke-width="2.5"/>
-          <line x1="45" y1="22" x2="48" y2="40" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="95" y1="22" x2="92" y2="40" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M 5,38 L 2,20 L 12,28 Z" fill="#ef4444"/>
-          <path d="M 135,38 L 138,20 L 128,28 Z" fill="#ef4444"/>
-        </svg>
-
-        <!-- 5. Осколки многослойного триплекс-стекла -->
-        <svg id="car-part-glass" class="absolute top-10 left-1/2 w-24 h-24 z-40 opacity-0 pointer-events-none drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]" viewBox="0 0 100 100">
-          <polygon points="15,10 52,38 12,65" fill="rgba(255,255,255,0.85)" stroke="#ffffff" stroke-width="2"/>
-          <line x1="18" y1="16" x2="45" y2="35" stroke="#38bdf8" stroke-width="1.5"/>
-          <polygon points="58,12 92,48 48,58" fill="rgba(186,230,253,0.85)" stroke="#ffffff" stroke-width="2"/>
-          <polygon points="28,52 75,92 18,96" fill="rgba(224,242,254,0.8)" stroke="#38bdf8" stroke-width="2"/>
-          <polygon points="78,55 96,75 80,88" fill="rgba(255,255,255,0.9)" stroke="#ffffff" stroke-width="1.5"/>
+        <!-- 9. Задний диффузор с выхлопными трубами -->
+        <svg id="part-bumper-rear" class="absolute top-14 left-1/2 w-30 h-16 z-40 opacity-0 pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)]" viewBox="0 0 150 70">
+          <path d="M 10,20 Q 75,5 140,20 L 130,55 Q 75,45 20,55 Z" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+          <rect x="40" y="42" width="22" height="12" rx="6" fill="#475569" stroke="#e2e8f0" stroke-width="2"/>
+          <rect x="88" y="42" width="22" height="12" rx="6" fill="#475569" stroke="#e2e8f0" stroke-width="2"/>
         </svg>
       </div>
 
@@ -273,17 +297,14 @@ export function initCrashTestQuiz(onOpenDrawer) {
 
     if (damage > 0) {
       hitCount++;
+      const q = crashQuestions[currentIndex] || {};
       const pebble = document.getElementById('strike-pebble');
+      const fireball = document.getElementById('explosion-fireball');
+      const smokeGroup = document.getElementById('smoke-group');
       const shardsGroup = document.getElementById('rock-shards-group');
-      const shockwave = document.getElementById('impact-shockwave');
+      const blastFlash = document.getElementById('blast-scene-flash');
       const spark = document.getElementById('spark-effect');
       const spider = document.getElementById('spider-glass-crack');
-
-      const partWheel = document.getElementById('car-part-wheel');
-      const partMirror = document.getElementById('car-part-mirror');
-      const partHeadlight = document.getElementById('car-part-headlight');
-      const partBumper = document.getElementById('car-part-bumper');
-      const partGlass = document.getElementById('car-part-glass');
 
       if (pebble) {
         pebble.classList.remove('pebble-anim');
@@ -292,10 +313,25 @@ export function initCrashTestQuiz(onOpenDrawer) {
       }
 
       setTimeout(() => {
-        if (shockwave) {
-          shockwave.classList.remove('shockwave-anim');
-          void shockwave.offsetWidth;
-          shockwave.classList.add('shockwave-anim');
+        // 1. Взрыв и огненный шар
+        if (blastFlash) {
+          blastFlash.classList.remove('blast-flash');
+          void blastFlash.offsetWidth;
+          blastFlash.classList.add('blast-flash');
+        }
+        if (fireball) {
+          fireball.classList.remove('opacity-0');
+          fireball.classList.remove('fireball-anim');
+          void fireball.offsetWidth;
+          fireball.classList.add('fireball-anim');
+        }
+        if (smokeGroup) {
+          smokeGroup.classList.remove('opacity-0');
+          smokeGroup.querySelectorAll('div').forEach(s => {
+            s.classList.remove('smoke-anim');
+            void s.offsetWidth;
+            s.classList.add('smoke-anim');
+          });
         }
         if (spark) {
           spark.classList.remove('spark-flash');
@@ -316,27 +352,32 @@ export function initCrashTestQuiz(onOpenDrawer) {
           spider.classList.add('spider-anim');
         }
 
-        // Отлетает ровно ОДНА реалистичная деталь за удар
-        const partsList = [
-          { el: partWheel, anim: 'fly-wheel' },
-          { el: partMirror, anim: 'fly-mirror' },
-          { el: partHeadlight, anim: 'fly-headlight' },
-          { el: partBumper, anim: 'fly-bumper' },
-          { el: partGlass, anim: 'fly-glass' }
-        ];
+        // 2. Отрыв и разлет кузовной части, привязанной к вопросу
+        const partAnimMap = {
+          'part-bumper-front': 'fly-bumper',
+          'part-headlight': 'fly-headlight',
+          'part-hood': 'fly-hood',
+          'part-windshield': 'fly-glass',
+          'part-door-front': 'fly-door',
+          'part-wheel-rim': 'fly-wheel',
+          'part-mirror-side': 'fly-mirror',
+          'part-roof-top': 'fly-roof',
+          'part-bumper-rear': 'fly-rear-bumper'
+        };
 
-        const partIndex = (hitCount - 1) % partsList.length;
-        const singlePart = partsList[partIndex];
+        const targetPartId = q.partId || 'part-hood';
+        const targetPartEl = document.getElementById(targetPartId);
+        const targetAnim = partAnimMap[targetPartId] || 'fly-hood';
 
-        if (singlePart && singlePart.el) {
-          singlePart.el.classList.remove(singlePart.anim);
-          void singlePart.el.offsetWidth;
-          singlePart.el.classList.add(singlePart.anim);
+        if (targetPartEl) {
+          targetPartEl.classList.remove(targetAnim);
+          void targetPartEl.offsetWidth;
+          targetPartEl.classList.add(targetAnim);
         }
 
         if (appContainer) {
           appContainer.classList.add('shake-hard');
-          setTimeout(() => appContainer.classList.remove('shake-hard'), 420);
+          setTimeout(() => appContainer.classList.remove('shake-hard'), 460);
         }
         if (damageFilter) {
           damageFilter.style.opacity = Math.min(1, totalDamage / 300);
@@ -344,7 +385,7 @@ export function initCrashTestQuiz(onOpenDrawer) {
         if (sceneBg) {
           sceneBg.style.filter = `sepia(${totalDamage/6}%) contrast(${100 + totalDamage/4}%)`;
         }
-      }, 430);
+      }, 440);
     }
 
     const pct = Math.min(Math.round((totalDamage / 675) * 100), 100);
