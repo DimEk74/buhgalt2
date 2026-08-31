@@ -1,22 +1,64 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
   <defs>
-    <linearGradient id="rockBase" x1="10%" y1="10%" x2="90%" y2="90%">
-      <stop offset="0%" stop-color="#cbd5e1" />
-      <stop offset="35%" stop-color="#64748b" />
-      <stop offset="70%" stop-color="#334155" />
+    <!-- Градиенты гранитной породы -->
+    <radialGradient id="rockMainGrad" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#f1f5f9" />
+      <stop offset="25%" stop-color="#94a3b8" />
+      <stop offset="55%" stop-color="#475569" />
+      <stop offset="85%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#090d16" />
+    </radialGradient>
+    <linearGradient id="facetTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#cbd5e1" />
+      <stop offset="100%" stop-color="#64748b" />
+    </linearGradient>
+    <linearGradient id="facetRight" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
       <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
-    <filter id="rockGlow">
-      <feDropShadow dx="4" dy="6" stdDeviation="5" flood-color="#000000" flood-opacity="0.85"/>
+    <linearGradient id="facetBottom" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <!-- Реалистичная объемная тень -->
+    <filter id="rockShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="6" dy="12" stdDeviation="8" flood-color="#000000" flood-opacity="0.9"/>
     </filter>
   </defs>
-  <g filter="url(#rockGlow)">
-    <!-- Основная грань камня -->
-    <path d="M 35,15 L 85,20 L 105,55 L 90,95 L 50,105 L 15,85 L 10,45 Z" fill="url(#rockBase)" stroke="#e2e8f0" stroke-width="2.5" stroke-linejoin="round" />
-    <!-- Ребра и грани для объема -->
-    <path d="M 35,15 L 55,55 L 105,55" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round" />
-    <path d="M 55,55 L 50,105" fill="none" stroke="rgba(15,23,42,0.7)" stroke-width="3" stroke-linecap="round" />
-    <path d="M 55,55 L 15,85" fill="none" stroke="rgba(15,23,42,0.6)" stroke-width="2.5" stroke-linecap="round" />
-    <path d="M 35,15 L 10,45" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
+
+  <g filter="url(#rockShadow)">
+    <!-- Базовый контур дикого натурального камня -->
+    <path d="M 55,20 L 135,15 L 180,65 L 175,130 L 125,185 L 50,175 L 18,125 L 15,65 Z" fill="url(#rockMainGrad)" stroke="#1e293b" stroke-width="2.5" stroke-linejoin="round" />
+
+    <!-- Верхние освещенные грани -->
+    <polygon points="55,20 105,55 135,15" fill="url(#facetTop)" opacity="0.9" />
+    <polygon points="55,20 18,65 65,85 105,55" fill="#cbd5e1" opacity="0.45" />
+    <polygon points="135,15 105,55 155,80 180,65" fill="#64748b" opacity="0.8" />
+
+    <!-- Центральный излом и сколы -->
+    <polygon points="105,55 65,85 100,125 155,80" fill="url(#facetTop)" opacity="0.55" />
+    <polygon points="18,65 18,125 60,135 65,85" fill="#334155" opacity="0.9" />
+
+    <!-- Теневые грани (глубокий объем) -->
+    <polygon points="155,80 100,125 145,155 175,130" fill="url(#facetRight)" opacity="0.95" />
+    <polygon points="100,125 60,135 80,180 125,185 145,155" fill="url(#facetBottom)" opacity="0.98" />
+    <polygon points="60,135 18,125 50,175 80,180" fill="#090d16" opacity="0.95" />
+
+    <!-- Острые светлые кромки -->
+    <path d="M 55,20 L 105,55 L 155,80 L 100,125 L 65,85 Z" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.85" />
+    <path d="M 105,55 L 135,15" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.9" />
+    <path d="M 65,85 L 18,65" fill="none" stroke="#e2e8f0" stroke-width="1.8" opacity="0.6" />
+
+    <!-- Темные глубокие расщелины -->
+    <path d="M 100,125 L 145,155 M 100,125 L 60,135 M 155,80 L 175,130" fill="none" stroke="#020617" stroke-width="3" stroke-linecap="round" />
+    <path d="M 60,135 L 80,180" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Мелкие текстурные сколы камня -->
+    <polygon points="75,45 88,40 82,52" fill="#ffffff" opacity="0.75" />
+    <polygon points="120,95 135,90 128,105" fill="#0f172a" opacity="0.85" />
+    <circle cx="95" cy="70" r="2.5" fill="#ffffff" opacity="0.7" />
+    <circle cx="115" cy="110" r="2" fill="#000000" opacity="0.8" />
+    <circle cx="50" cy="110" r="2.5" fill="#f8fafc" opacity="0.5" />
   </g>
 </svg>
