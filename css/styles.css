@@ -166,34 +166,34 @@ h1 em, h2 em, h3 em, .font-serif em {
 /* ── Кинематографичный прилет и сокрушительный удар камня ── */
 @keyframes rockFlyCinematic {
   0% {
-    transform: translate3d(-380px, -240px, 0) scale(0.2) rotate(-320deg);
+    transform: translate3d(-360px, -220px, 0) scale(0.2) rotate(-320deg);
     opacity: 0;
-    filter: blur(3px) drop-shadow(0 20px 30px rgba(0,0,0,0.9));
+    filter: blur(2px) drop-shadow(0 15px 25px rgba(0,0,0,0.85));
   }
   20% {
     opacity: 1;
-    transform: translate3d(-240px, -140px, 0) scale(0.65) rotate(-180deg);
+    transform: translate3d(-220px, -130px, 0) scale(0.55) rotate(-180deg);
     filter: blur(1px);
   }
   65% {
     opacity: 1;
-    transform: translate3d(-40px, -20px, 0) scale(1.15) rotate(15deg);
+    transform: translate3d(-35px, -18px, 0) scale(0.95) rotate(15deg);
     filter: blur(0px);
   }
   76% {
-    /* Момент сокрушительного удара по центру капота */
+    /* Момент удара камня по центру капота */
     opacity: 1;
-    transform: translate3d(0px, 0px, 0) scale(1.35) rotate(45deg);
-    filter: brightness(1.9) drop-shadow(0 0 35px #f59e0b);
+    transform: translate3d(0px, 0px, 0) scale(1.05) rotate(45deg);
+    filter: brightness(1.8) drop-shadow(0 0 25px #f59e0b);
   }
   85% {
     /* Физический рикошет и раскол */
     opacity: 0.9;
-    transform: translate3d(45px, 30px, 0) scale(0.95) rotate(110deg);
+    transform: translate3d(40px, 25px, 0) scale(0.8) rotate(110deg);
     filter: brightness(1.1);
   }
   100% {
-    transform: translate3d(160px, 140px, 0) scale(0.3) rotate(320deg);
+    transform: translate3d(140px, 120px, 0) scale(0.25) rotate(320deg);
     opacity: 0;
   }
 }
