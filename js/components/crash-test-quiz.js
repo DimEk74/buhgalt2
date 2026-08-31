@@ -91,7 +91,7 @@ export function renderCrashTestQuiz(state = {}) {
         <div id="blast-scene-flash" class="absolute inset-0 bg-amber-200/50 mix-blend-screen opacity-0 pointer-events-none z-30"></div>
 
         <!-- 1. Натуральный 3D Гранитный Камень (Динамичный прилет) -->
-        <img id="strike-rock" src="./img/rock.svg" alt="Камень" class="absolute top-10 left-1/2 -translate-x-1/2 w-24 h-24 z-38 opacity-0 pointer-events-none drop-shadow-[0_25px_35px_rgba(0,0,0,0.95)]" />
+        <img id="strike-rock" src="./img/rock.svg" alt="Камень" class="absolute top-10 left-1/2 -translate-x-1/2 w-14 h-14 z-38 opacity-0 pointer-events-none drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)]" />
 
         <!-- 2. Кольцевая ударная волна Маха (Mach Shockwave Ring) -->
         <div id="mach-shockwave" class="absolute top-20 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full border-4 border-[#FEF08A] z-34 opacity-0 pointer-events-none mix-blend-screen"></div>
