@@ -90,38 +90,47 @@ export function renderCrashTestQuiz(state = {}) {
         <!-- Вспышка на всю сцену при детонации -->
         <div id="blast-scene-flash" class="absolute inset-0 bg-yellow-300/40 mix-blend-screen opacity-0 pointer-events-none z-30"></div>
 
-        <!-- 1. Натуральный 3D Гранитный Булыжник -->
-        <img id="strike-pebble" src="./img/rock.svg" alt="Булыжник" class="absolute top-10 left-1/2 -translate-x-1/2 w-20 h-20 z-30 opacity-0 pointer-events-none drop-shadow-[0_15px_25px_rgba(0,0,0,0.95)]" />
+        <!-- 1. Натуральный 3D Налоговый Молот / Кувалда (Strike Hammer) -->
+        <img id="strike-hammer" src="./img/tax_hammer.png" alt="Молот" class="absolute top-4 left-1/2 -translate-x-1/2 w-32 h-32 z-38 opacity-0 pointer-events-none drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)]" />
 
-        <!-- 2. Анимированный Огненный Шар Взрыва (Fireball & Blast Wave) -->
-        <div id="explosion-fireball" class="absolute top-16 left-1/2 w-28 h-28 z-35 pointer-events-none opacity-0 flex items-center justify-center">
-          <svg viewBox="0 0 100 100" class="w-full h-full">
-            <radialGradient id="fireGrad1" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ffffff" />
-              <stop offset="20%" stop-color="#fef08a" />
-              <stop offset="45%" stop-color="#f59e0b" />
-              <stop offset="75%" stop-color="#ef4444" />
-              <stop offset="95%" stop-color="#7f1d1d" />
-              <stop offset="100%" stop-color="transparent" />
-            </radialGradient>
-            <path d="M50 5 Q65 25 85 15 Q80 40 95 50 Q75 65 85 90 Q60 80 50 95 Q40 80 15 90 Q25 65 5 50 Q20 40 15 15 Q35 25 50 5 Z" fill="url(#fireGrad1)"/>
-            <circle cx="50" cy="50" r="22" fill="#ffffff" opacity="0.9"/>
+        <!-- 2. Анимированный Реалистичный Огненный Шар Взрыва (Volumetric Fireball) -->
+        <div id="explosion-fireball" class="absolute top-16 left-1/2 w-36 h-36 z-36 pointer-events-none opacity-0 flex items-center justify-center">
+          <svg viewBox="0 0 120 120" class="w-full h-full filter drop-shadow-[0_0_30px_#f97316]">
+            <defs>
+              <radialGradient id="nukeCore1" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="25%" stop-color="#fef08a" />
+                <stop offset="50%" stop-color="#f97316" />
+                <stop offset="75%" stop-color="#dc2626" />
+                <stop offset="92%" stop-color="#7f1d1d" />
+                <stop offset="100%" stop-color="transparent" />
+              </radialGradient>
+              <radialGradient id="plasmaCore1" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="40%" stop-color="#fef08a" />
+                <stop offset="80%" stop-color="#f97316" stop-opacity="0.8" />
+                <stop offset="100%" stop-color="transparent" />
+              </radialGradient>
+            </defs>
+            <path d="M60 4 Q78 18 102 10 Q96 38 114 52 Q92 70 104 98 Q76 88 64 116 Q48 98 18 108 Q30 78 6 60 Q26 48 18 18 Q42 30 60 4 Z" fill="url(#nukeCore1)"/>
+            <circle cx="60" cy="60" r="32" fill="url(#plasmaCore1)"/>
+            <circle cx="60" cy="60" r="16" fill="#ffffff" opacity="0.95"/>
           </svg>
         </div>
 
-        <!-- 3. Клубы дыма от взрыва -->
-        <div id="smoke-group" class="absolute top-16 left-1/2 -translate-x-1/2 w-20 h-20 z-32 pointer-events-none opacity-0">
-          <div class="absolute w-8 h-8 rounded-full bg-[#1e293b]/80 blur-sm" style="--smk-x: 35px; --smk-y: -40px;"></div>
-          <div class="absolute w-10 h-10 rounded-full bg-[#0f172a]/90 blur-sm" style="--smk-x: -40px; --smk-y: -30px;"></div>
-          <div class="absolute w-7 h-7 rounded-full bg-[#334155]/70 blur-sm" style="--smk-x: 25px; --smk-y: 35px;"></div>
+        <!-- 3. Клубы черного дыма от детонации -->
+        <div id="smoke-group" class="absolute top-16 left-1/2 -translate-x-1/2 w-24 h-24 z-32 pointer-events-none opacity-0">
+          <div class="absolute w-12 h-12 rounded-full bg-[#0f172a]/95 blur-md" style="--smk-x: 45px; --smk-y: -50px;"></div>
+          <div class="absolute w-14 h-14 rounded-full bg-[#1e293b]/90 blur-md" style="--smk-x: -50px; --smk-y: -40px;"></div>
+          <div class="absolute w-10 h-10 rounded-full bg-[#334155]/85 blur-sm" style="--smk-x: 30px; --smk-y: 45px;"></div>
         </div>
 
-        <!-- 4. Разлетающиеся каменные осколки и крошка -->
-        <div id="rock-shards-group" class="absolute top-16 left-1/2 -translate-x-1/2 w-16 h-16 z-30 pointer-events-none opacity-0">
-          <div class="absolute w-3 h-3 bg-[#475569] border border-[#94a3b8] rounded-sm" style="--shard-x: 65px; --shard-y: -55px; --shard-r: 320deg;"></div>
-          <div class="absolute w-2.5 h-2.5 bg-[#334155] border border-[#cbd5e1] rounded-sm" style="--shard-x: -70px; --shard-y: -45px; --shard-r: -280deg;"></div>
-          <div class="absolute w-2 h-2 bg-[#1e293b] border border-[#94a3b8] rounded-sm" style="--shard-x: 50px; --shard-y: 60px; --shard-r: 400deg;"></div>
-          <div class="absolute w-2 h-2 bg-[#64748b] rounded-sm" style="--shard-x: -55px; --shard-y: 50px; --shard-r: -360deg;"></div>
+        <!-- 4. Разлетающиеся раскаленные угли и искры -->
+        <div id="embers-group" class="absolute top-16 left-1/2 -translate-x-1/2 w-20 h-20 z-34 pointer-events-none opacity-0">
+          <div class="absolute w-3 h-3 bg-[#fef08a] rounded-full shadow-[0_0_10px_#f59e0b]" style="--ember-x: 75px; --ember-y: -65px; --ember-r: 360deg;"></div>
+          <div class="absolute w-2.5 h-2.5 bg-[#f97316] rounded-full shadow-[0_0_10px_#ef4444]" style="--ember-x: -80px; --ember-y: -50px; --ember-r: -300deg;"></div>
+          <div class="absolute w-2 h-2 bg-[#ffffff] rounded-full shadow-[0_0_8px_#ffffff]" style="--ember-x: 60px; --ember-y: 65px; --ember-r: 420deg;"></div>
+          <div class="absolute w-2 h-2 bg-[#ef4444] rounded-full shadow-[0_0_8px_#f97316]" style="--ember-x: -65px; --ember-y: 55px; --ember-r: -380deg;"></div>
         </div>
 
         <!-- 5. Сноп искр и паутина трещин -->
@@ -298,22 +307,22 @@ export function initCrashTestQuiz(onOpenDrawer) {
     if (damage > 0) {
       hitCount++;
       const q = crashQuestions[currentIndex] || {};
-      const pebble = document.getElementById('strike-pebble');
+      const hammer = document.getElementById('strike-hammer');
       const fireball = document.getElementById('explosion-fireball');
       const smokeGroup = document.getElementById('smoke-group');
-      const shardsGroup = document.getElementById('rock-shards-group');
+      const embersGroup = document.getElementById('embers-group');
       const blastFlash = document.getElementById('blast-scene-flash');
       const spark = document.getElementById('spark-effect');
       const spider = document.getElementById('spider-glass-crack');
 
-      if (pebble) {
-        pebble.classList.remove('pebble-anim');
-        void pebble.offsetWidth;
-        pebble.classList.add('pebble-anim');
+      if (hammer) {
+        hammer.classList.remove('hammer-anim');
+        void hammer.offsetWidth;
+        hammer.classList.add('hammer-anim');
       }
 
       setTimeout(() => {
-        // 1. Взрыв и огненный шар
+        // 1. Взрыв и огненный шар при ударе молота
         if (blastFlash) {
           blastFlash.classList.remove('blast-flash');
           void blastFlash.offsetWidth;
@@ -338,12 +347,12 @@ export function initCrashTestQuiz(onOpenDrawer) {
           void spark.offsetWidth;
           spark.classList.add('spark-flash');
         }
-        if (shardsGroup) {
-          shardsGroup.classList.remove('opacity-0');
-          shardsGroup.querySelectorAll('div').forEach(s => {
-            s.classList.remove('shards-anim');
+        if (embersGroup) {
+          embersGroup.classList.remove('opacity-0');
+          embersGroup.querySelectorAll('div').forEach(s => {
+            s.classList.remove('embers-anim');
             void s.offsetWidth;
-            s.classList.add('shards-anim');
+            s.classList.add('embers-anim');
           });
         }
         if (spider) {
@@ -385,7 +394,7 @@ export function initCrashTestQuiz(onOpenDrawer) {
         if (sceneBg) {
           sceneBg.style.filter = `sepia(${totalDamage/6}%) contrast(${100 + totalDamage/4}%)`;
         }
-      }, 440);
+      }, 430);
     }
 
     const pct = Math.min(Math.round((totalDamage / 675) * 100), 100);
